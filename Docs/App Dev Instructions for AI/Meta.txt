@@ -1,0 +1,61 @@
+Linux Installation Centers (Linux ICs) Web/Mobile App Development Instructions
+Overview
+Develop a web and mobile app for Linux ICs, a platform that connects Linux experts with new users, providing offline installation services and support. The app should facilitate expert registration, user requests, matching, and payment processing.
+Functional Requirements
+User Registration and Profile Management
+Users can create profiles, specifying their location and Linux needs.
+Users can edit their profiles and request history.
+Expert Registration and Profile Management
+Experts can create profiles, showcasing their skills, experience, and location.
+Experts can edit their profiles and service offerings.
+Request System
+Users can submit requests for Linux installation services, specifying their location and preferred distro.
+Experts can view and bid on requests.
+Matching System
+The app should match users with nearby experts based on their requests and expert profiles.
+Payment Processing
+The app should facilitate payment processing for expert services, including commission-based payments.
+Rating and Review System
+Users can rate and review experts after service completion.
+Experts can rate and review users.
+Demo and Installation Services
+Experts can offer demo services to users before installation.
+Experts can install Linux on users' devices.
+Non-Functional Requirements
+Security
+Implement robust security measures to protect user data and payment information.
+Scalability
+Design the app to scale with increasing user and expert registrations.
+User Experience
+Develop an intuitive and user-friendly interface for both web and mobile apps.
+Technical Requirements
+Backend
+Use a robust backend framework (e.g., Node.js, Django) to handle API requests and business logic.
+Implement a database (e.g., MySQL, MongoDB) to store user and expert profiles, requests, and payment information.
+Frontend
+Develop a responsive web app using HTML, CSS, and JavaScript.
+Develop mobile apps for Android and iOS using native or cross-platform frameworks (e.g., React Native, Flutter).
+API Integration
+Integrate payment gateways (e.g., Stripe, PayPal) for secure payment processing.
+Use geolocation APIs (e.g., Google Maps) for location-based matching.
+Development Roadmap
+Phase 1: Research and Planning (2 weeks)
+Research existing solutions and competitors.
+Define the project scope, timeline, and budget.
+Phase 2: Design (4 weeks)
+Create wireframes and prototypes for web and mobile apps.
+Develop a visual design concept.
+Phase 3: Backend Development (8 weeks)
+Implement backend API and database.
+Integrate payment gateways and geolocation APIs.
+Phase 4: Frontend Development (8 weeks)
+Develop web and mobile apps.
+Implement user interface and user experience.
+Phase 5: Testing and Deployment (4 weeks)
+Conduct thorough testing and debugging.
+Deploy the app on web and mobile platforms.
+AI Agent Instructions
+Use natural language processing (NLP) to analyze user requests and expert profiles.
+Apply machine learning algorithms to match users with suitable experts based on their profiles and requests.
+Implement a recommendation system to suggest experts to users based on their preferences and behavior.
+By following these instructions, the AI agent should develop a comprehensive web and mobile app for Linux ICs, providing a seamless experience for users and experts.
