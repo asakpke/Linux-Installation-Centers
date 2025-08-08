@@ -1,5 +1,14 @@
 # Linux Installation Centers (Linux ICs)
-Linux ICs is a platform that connects new Linux users with local experts for offline installation and distro selection support, addressing the complexity and inaccessibility of adopting Linux. By offering location-based matching, beginner-friendly guidance, and flexible free or paid services, Linux ICs empowers users to transition to Linux seamlessly while providing experts a platform to share expertise and earn income. With a growing interest in open-source software and a fragmented support landscape, Linux ICs fills a critical gap, targeting a global market of tech enthusiasts, students, and professionals.
+Linux ICs is a platform that connects new Linux users with local experts for offline installation and distro selection support, addressing the complexity and inaccessibility of adopting Linux. By offering location-based matching, beginner-friendly guidance, and flexible free or paid services, Linux ICs empowers users to transition to Linux seamlessly while providing experts a platform to share expertise and earn income. With a growing interest in open-source software, and a fragmented support landscape, Linux ICs fills a critical gap, targeting a global market of tech enthusiasts, students, and professionals.
+
+This project is being developed with the assistance of AI.
+
+## Tech Stack
+This project will be built using the TALL stack:
+- **T**ailwind CSS
+- **A**lpine.js
+- **L**aravel
+- **L**ivewire
 
 The Linux ICs idea started from 2009/2010. Just check my blog at that time https://linux-ic.blogspot.com/
 
