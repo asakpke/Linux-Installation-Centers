@@ -28,3 +28,10 @@ Homestead.json
 .env.production
 .phpactor.json
 auth.json
+
+# From Laravel 12.x fresh install
+/.fleet
+/.idea
+/.nova
+/.vscode
+/.zed
