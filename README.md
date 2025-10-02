@@ -10,6 +10,28 @@ This project will be built using the TALL stack:
 - **L**aravel
 - **L**ivewire
 
+## Getting Started
+
+To get the project running locally, follow these steps:
+
+1.  **Install Dependencies:** Install both PHP and Node.js packages.
+    ```bash
+    composer install
+    npm install
+    ```
+
+2.  **Setup Environment:** Copy the example environment file, generate an application key, and run the database migrations.
+    ```bash
+    cp .env.example .env
+    php artisan key:generate
+    php artisan migrate
+    ```
+
+3.  **Run Development Servers:** This command will start the PHP server, Vite, the queue listener, and the log service all at once.
+    ```bash
+    composer run dev
+    ```
+
 The Linux ICs idea started from 2009/2010. Just check my blog at that time https://linux-ic.blogspot.com/
 
 # docs folder
