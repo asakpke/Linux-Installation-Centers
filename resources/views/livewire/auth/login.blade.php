@@ -40,7 +40,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
 
-        if (Auth::user()->role === 'expert') {
+        if (Auth::user()->role === \App\Enums\UserRole::EXPERT) {
             $this->redirectIntended(default: route('expert.dashboard', absolute: false), navigate: true);
         } else {
             $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
