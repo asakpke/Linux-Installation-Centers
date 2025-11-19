@@ -61,6 +61,9 @@
 
                     <flux:menu.radio.group>
                         <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
+                        @if(auth()->user()->role === \App\Enums\UserRole::EXPERT)
+                            <flux:menu.item :href="route('expert.profile')" icon="user-circle" wire:navigate>{{ __('Expert Profile') }}</flux:menu.item>
+                        @endif
                     </flux:menu.radio.group>
 
                     <flux:menu.separator />
@@ -111,6 +114,9 @@
 
                     <flux:menu.radio.group>
                         <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
+                        @if(auth()->user()->role === \App\Enums\UserRole::EXPERT)
+                            <flux:menu.item :href="route('expert.profile')" icon="user-circle" wire:navigate>{{ __('Expert Profile') }}</flux:menu.item>
+                        @endif
                     </flux:menu.radio.group>
 
                     <flux:menu.separator />
