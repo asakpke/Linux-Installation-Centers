@@ -27,7 +27,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         $validated['password'] = Hash::make($validated['password']);
         
-        $validated['role'] = 'expert';
+        $validated['role'] = \App\Enums\UserRole::EXPERT;
 
         event(new Registered(($user = User::create($validated))));
 
