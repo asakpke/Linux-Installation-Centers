@@ -50,6 +50,11 @@ class User extends Authenticatable
         ];
     }
 
+    public function expertProfile()
+    {
+        return $this->hasOne(ExpertProfile::class);
+    }
+
     /**
      * Get the user's initials
      */

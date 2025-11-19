@@ -25,4 +25,6 @@ Route::middleware(['auth', 'role:expert'])->group(function () {
     Route::get('/expert/dashboard', function () {
         return view('expert.dashboard');
     })->name('expert.dashboard');
+
+    Volt::route('expert/profile', 'expert.edit-profile')->name('expert.profile');
 });
