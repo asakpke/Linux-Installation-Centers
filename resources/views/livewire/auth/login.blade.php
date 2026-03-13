@@ -40,11 +40,13 @@ new #[Layout('components.layouts.auth')] class extends Component {
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
 
-        if (Auth::user()->role === \App\Enums\UserRole::EXPERT) {
-            $this->redirectIntended(default: route('expert.dashboard', absolute: false), navigate: true);
-        } else {
-            $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
-        }
+        $role = Auth::user()->role;
+        $default = match ($role) {
+            \App\Enums\UserRole::EXPERT => route('expert.dashboard', [], false),
+            \App\Enums\UserRole::ADMIN => route('dashboard', [], false), // TODO: use route('admin.dashboard') when admin panel exists
+            default => route('dashboard', [], false),
+        };
+        $this->redirectIntended(default: $default, navigate: true);
     }
 
     /**
