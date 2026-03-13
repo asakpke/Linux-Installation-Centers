@@ -7,13 +7,21 @@
         <flux:sidebar sticky stashable class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
-            <a href="{{ route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
+            @php
+                $isExpert = auth()->user()->role === \App\Enums\UserRole::EXPERT;
+            @endphp
+            <a href="{{ $isExpert ? route('expert.dashboard') : route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
                 <x-app-logo />
             </a>
 
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
-                    <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                    @if($isExpert)
+                        <flux:navlist.item icon="home" :href="route('expert.dashboard')" :current="request()->routeIs('expert.dashboard')" wire:navigate>{{ __('Expert Dashboard') }}</flux:navlist.item>
+                        <flux:navlist.item icon="user-circle" :href="route('expert.profile')" :current="request()->routeIs('expert.profile')" wire:navigate>{{ __('Expert Profile') }}</flux:navlist.item>
+                    @else
+                        <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                    @endif
                 </flux:navlist.group>
             </flux:navlist>
 
