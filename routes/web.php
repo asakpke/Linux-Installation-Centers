@@ -20,7 +20,7 @@ Route::middleware(['auth'])->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::middleware(['auth', 'role:expert'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:expert'])->group(function () {
     Route::get('/expert/dashboard', function () {
         return view('expert.dashboard');
     })->name('expert.dashboard');
