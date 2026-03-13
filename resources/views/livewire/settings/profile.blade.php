@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -58,7 +59,10 @@ new class extends Component {
         $user = Auth::user();
 
         if ($user->hasVerifiedEmail()) {
-            $this->redirectIntended(default: route('dashboard', absolute: false));
+            $default = $user->role === UserRole::EXPERT
+                ? route('expert.dashboard', [], false)
+                : route('dashboard', [], false);
+            $this->redirectIntended(default: $default);
 
             return;
         }
