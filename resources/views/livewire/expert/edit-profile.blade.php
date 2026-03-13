@@ -3,7 +3,7 @@
 use App\Models\ExpertProfile;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
-use Livewire\Volt\Component;
+use Livewire\Component;
 
 new #[Layout('components.layouts.app')] class extends Component {
     public string $bio = '';

@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Livewire\Volt\Volt;
 
 Route::get('/', function () {
     return view('welcome');
@@ -14,9 +13,9 @@ Route::view('dashboard', 'dashboard')
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
-    Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
-    Volt::route('settings/password', 'settings.password')->name('settings.password');
-    Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
+    Route::livewire('settings/profile', 'settings.profile')->name('settings.profile');
+    Route::livewire('settings/password', 'settings.password')->name('settings.password');
+    Route::livewire('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
 
 require __DIR__.'/auth.php';
@@ -26,5 +25,5 @@ Route::middleware(['auth', 'role:expert'])->group(function () {
         return view('expert.dashboard');
     })->name('expert.dashboard');
 
-    Volt::route('expert/profile', 'expert.edit-profile')->name('expert.profile');
+    Route::livewire('expert/profile', 'expert.edit-profile')->name('expert.profile');
 });
