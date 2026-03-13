@@ -19,7 +19,9 @@ new #[Layout('components.layouts.app')] class extends Component {
             $this->bio = $profile->bio ?? '';
             $this->location = $profile->location ?? '';
             $this->website = $profile->website ?? '';
-            $this->hourly_rate = $profile->hourly_rate ?? '';
+            $this->hourly_rate = $profile->hourly_rate !== null && $profile->hourly_rate !== ''
+                ? (string) $profile->hourly_rate
+                : '';
         }
     }
 
