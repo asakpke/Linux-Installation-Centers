@@ -1,12 +1,19 @@
 <?php
 
+use App\Enums\UserRole;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::view('dashboard', 'dashboard')
+Route::get('dashboard', function () {
+    if (auth()->user()->role === UserRole::EXPERT) {
+        return redirect()->route('expert.dashboard');
+    }
+
+    return view('dashboard');
+})
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
