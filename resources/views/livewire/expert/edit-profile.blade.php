@@ -43,67 +43,50 @@ new #[Layout('components.layouts.app')] class extends Component {
     }
 }; ?>
 
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-        <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-            <div class="max-w-xl">
-                <section>
-                    <header>
-                        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                            {{ __('Expert Profile') }}
-                        </h2>
+<section class="w-full">
+    <flux:heading>{{ __('Expert Profile') }}</flux:heading>
+    <flux:subheading>{{ __('Update your expert profile information.') }}</flux:subheading>
 
-                        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                            {{ __("Update your expert profile information.") }}
-                        </p>
-                    </header>
+    <div class="mt-5 w-full max-w-lg">
+        <form wire:submit="save" class="my-6 w-full space-y-6">
+            <flux:textarea
+                wire:model="bio"
+                :label="__('Bio')"
+                rows="4"
+                :placeholder="__('Tell us about your expertise...')"
+            />
 
-                    <form wire:submit="save" class="mt-6 space-y-6">
-                        <!-- Bio -->
-                        <flux:textarea
-                            wire:model="bio"
-                            :label="__('Bio')"
-                            rows="4"
-                            :placeholder="__('Tell us about your expertise...')"
-                        />
+            <flux:input
+                wire:model="location"
+                :label="__('Location')"
+                type="text"
+                :placeholder="__('City, Country')"
+            />
 
-                        <!-- Location -->
-                        <flux:input
-                            wire:model="location"
-                            :label="__('Location')"
-                            type="text"
-                            :placeholder="__('City, Country')"
-                        />
+            <flux:input
+                wire:model="website"
+                :label="__('Website')"
+                type="url"
+                placeholder="https://example.com"
+            />
 
-                        <!-- Website -->
-                        <flux:input
-                            wire:model="website"
-                            :label="__('Website')"
-                            type="url"
-                            placeholder="https://example.com"
-                        />
+            <flux:input
+                wire:model="hourly_rate"
+                :label="__('Hourly Rate ($)')"
+                type="number"
+                step="0.01"
+                placeholder="0.00"
+            />
 
-                        <!-- Hourly Rate -->
-                        <flux:input
-                            wire:model="hourly_rate"
-                            :label="__('Hourly Rate ($)')"
-                            type="number"
-                            step="0.01"
-                            placeholder="0.00"
-                        />
+            <div class="flex items-center gap-4">
+                <flux:button type="submit" variant="primary">
+                    {{ __('Save') }}
+                </flux:button>
 
-                        <div class="flex items-center gap-4">
-                            <flux:button type="submit" variant="primary">
-                                {{ __('Save') }}
-                            </flux:button>
-
-                            <x-action-message class="me-3" on="profile-updated">
-                                {{ __('Saved.') }}
-                            </x-action-message>
-                        </div>
-                    </form>
-                </section>
+                <x-action-message class="me-3" on="profile-updated">
+                    {{ __('Saved.') }}
+                </x-action-message>
             </div>
-        </div>
+        </form>
     </div>
-</div>
+</section>
