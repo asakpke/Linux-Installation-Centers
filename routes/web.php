@@ -4,7 +4,9 @@ use App\Enums\UserRole;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome', [
+        'github_url' => 'https://github.com/asakpke/Linux-Installation-Centers',
+    ]);
 })->name('home');
 
 Route::get('dashboard', function () {
