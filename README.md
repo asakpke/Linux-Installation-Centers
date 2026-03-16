@@ -39,3 +39,7 @@ The Linux ICs idea started from 2009/2010. Just check my blog at that time https
 
 # docs folder
 AI prompts, AI Answers, "Prompts used to AI" and "App Dev Instructions for AI" folders are used just as a reference or helping material. We might not follow all the instructions given by the AI.
+
+---
+
+**Powered by [RoshanTech](https://www.esite.pk) · [www.eSite.pk](https://www.esite.pk)**

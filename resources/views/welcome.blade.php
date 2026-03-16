@@ -118,9 +118,12 @@
             </section>
 
             {{-- Footer note --}}
-            <footer class="pt-8 border-t border-[#e5e7eb] dark:border-[#3E3E3A] text-center">
+            <footer class="pt-8 border-t border-[#e5e7eb] dark:border-[#3E3E3A] text-center space-y-2">
                 <p class="text-sm text-[#6b7280] dark:text-[#9ca3af]">
                     This project is under development. Follow progress, report issues, or contribute on <a href="{{ $github_url ?? 'https://github.com/asakpke/Linux-Installation-Centers' }}" target="_blank" rel="noopener noreferrer">GitHub</a>.
+                </p>
+                <p class="text-xs text-[#9ca3af] dark:text-[#6b7280]">
+                    Powered by <a href="https://www.esite.pk" target="_blank" rel="noopener noreferrer" class="hover:underline">RoshanTech</a> · <a href="https://www.esite.pk" target="_blank" rel="noopener noreferrer" class="hover:underline">www.eSite.pk</a>
                 </p>
             </footer>
         </div>

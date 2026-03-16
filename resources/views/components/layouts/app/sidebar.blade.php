@@ -27,6 +27,10 @@
 
             <flux:spacer />
 
+            <p class="px-2 py-1.5 text-[10px] text-zinc-500 dark:text-zinc-400">
+                Powered by <a href="https://www.esite.pk" target="_blank" rel="noopener noreferrer" class="hover:underline">RoshanTech</a> · <a href="https://www.esite.pk" target="_blank" rel="noopener noreferrer" class="hover:underline">www.eSite.pk</a>
+            </p>
+
             <flux:navlist variant="outline">
                 <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
                 {{ __('Repository') }}
