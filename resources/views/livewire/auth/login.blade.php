@@ -42,8 +42,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         $role = Auth::user()->role;
         $default = match ($role) {
+            \App\Enums\UserRole::ADMIN => route('admin.dashboard', [], false),
             \App\Enums\UserRole::EXPERT => route('expert.dashboard', [], false),
-            \App\Enums\UserRole::ADMIN => route('dashboard', [], false), // TODO: use route('admin.dashboard') when admin panel exists
             default => route('dashboard', [], false),
         };
         $this->redirectIntended(default: $default, navigate: true);

@@ -10,7 +10,11 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('dashboard', function () {
-    if (auth()->user()->role === UserRole::EXPERT) {
+    $user = auth()->user();
+    if ($user->role === UserRole::ADMIN) {
+        return redirect()->route('admin.dashboard');
+    }
+    if ($user->role === UserRole::EXPERT) {
         return redirect()->route('expert.dashboard');
     }
 
@@ -35,4 +39,14 @@ Route::middleware(['auth', 'verified', 'role:expert'])->group(function () {
     })->name('expert.dashboard');
 
     Route::livewire('expert/profile', 'expert.edit-profile')->name('expert.profile');
+});
+
+Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('dashboard');
+
+    Route::livewire('users', 'admin.users-index')->name('users.index');
+    Route::livewire('users/create', 'admin.user-form')->name('users.create');
+    Route::livewire('users/{user}/edit', 'admin.user-form')->name('users.edit');
 });
