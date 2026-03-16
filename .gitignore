@@ -35,3 +35,7 @@ auth.json
 /.nova
 /.vscode
 /.zed
+
+# Hostinger / server-specific files (do not commit)
+public/default.php
+xdefault.php
