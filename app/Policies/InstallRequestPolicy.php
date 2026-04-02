@@ -82,6 +82,19 @@ class InstallRequestPolicy
             && $installRequest->status === InstallRequestStatus::OPEN;
     }
 
+    /**
+     * Seeker marks the install as finished (expert assignment moves to "completed" for experts).
+     */
+    public function complete(User $user, InstallRequest $installRequest): bool
+    {
+        if (! $user->is_active) {
+            return false;
+        }
+
+        return $installRequest->user_id === $user->id
+            && $installRequest->status === InstallRequestStatus::MATCHED;
+    }
+
     public function expertCanAccessRequest(User $user, InstallRequest $installRequest): bool
     {
         if ($user->role !== UserRole::EXPERT) {

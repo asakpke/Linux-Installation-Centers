@@ -20,7 +20,8 @@
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     @if($isExpert)
                         <flux:navlist.item icon="home" :href="route('expert.dashboard')" :current="request()->routeIs('expert.dashboard')" wire:navigate>{{ __('Expert Dashboard') }}</flux:navlist.item>
-                        <flux:navlist.item icon="map-pin" :href="route('expert.requests.index')" :current="request()->routeIs('expert.requests.*')" wire:navigate>{{ __('Open requests') }}</flux:navlist.item>
+                        <flux:navlist.item icon="check-circle" :href="route('expert.assignments')" :current="request()->routeIs('expert.assignments')" wire:navigate>{{ __('My assignments') }}</flux:navlist.item>
+                        <flux:navlist.item icon="map-pin" :href="route('expert.requests.index')" :current="request()->routeIs('expert.requests.index') || request()->routeIs('expert.requests.show')" wire:navigate>{{ __('Open requests') }}</flux:navlist.item>
                         <flux:navlist.item icon="user-circle" :href="route('expert.profile')" :current="request()->routeIs('expert.profile')" wire:navigate>{{ __('Expert Profile') }}</flux:navlist.item>
                     @elseif($isUser)
                         <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
@@ -80,6 +81,7 @@
                     <flux:menu.radio.group>
                         <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
                         @if(auth()->user()->role === \App\Enums\UserRole::EXPERT)
+                            <flux:menu.item :href="route('expert.assignments')" icon="check-circle" wire:navigate>{{ __('My assignments') }}</flux:menu.item>
                             <flux:menu.item :href="route('expert.profile')" icon="user-circle" wire:navigate>{{ __('Expert Profile') }}</flux:menu.item>
                         @endif
                     </flux:menu.radio.group>
@@ -133,6 +135,7 @@
                     <flux:menu.radio.group>
                         <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
                         @if(auth()->user()->role === \App\Enums\UserRole::EXPERT)
+                            <flux:menu.item :href="route('expert.assignments')" icon="check-circle" wire:navigate>{{ __('My assignments') }}</flux:menu.item>
                             <flux:menu.item :href="route('expert.profile')" icon="user-circle" wire:navigate>{{ __('Expert Profile') }}</flux:menu.item>
                         @endif
                     </flux:menu.radio.group>

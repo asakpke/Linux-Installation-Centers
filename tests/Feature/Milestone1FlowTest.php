@@ -93,3 +93,65 @@ test('admin can view install requests index', function () {
         ->get(route('admin.requests.index'))
         ->assertOk();
 });
+
+test('expert can view assignments page', function () {
+    $expert = User::factory()->expert()->create();
+
+    $this->actingAs($expert)
+        ->get(route('expert.assignments'))
+        ->assertOk();
+});
+
+test('seeker may complete policy only when request is matched', function () {
+    $seeker = User::factory()->create(['role' => UserRole::USER]);
+    $matched = InstallRequest::factory()->create([
+        'user_id' => $seeker->id,
+        'status' => InstallRequestStatus::MATCHED,
+    ]);
+    $open = InstallRequest::factory()->create([
+        'user_id' => $seeker->id,
+        'status' => InstallRequestStatus::OPEN,
+    ]);
+
+    expect($seeker->can('complete', $matched))->toBeTrue();
+    expect($seeker->can('complete', $open))->toBeFalse();
+});
+
+test('marking matched request closed moves expert assignment to completed', function () {
+    $seeker = User::factory()->create(['role' => UserRole::USER]);
+    $expert = User::factory()->expert()->create();
+    ExpertProfile::create([
+        'user_id' => $expert->id,
+        'bio' => 'Pro',
+        'city' => 'Lahore',
+        'country' => 'Pakistan',
+    ]);
+
+    $installRequest = InstallRequest::factory()->create([
+        'user_id' => $seeker->id,
+        'city' => 'Lahore',
+        'country' => 'Pakistan',
+        'status' => InstallRequestStatus::MATCHED,
+    ]);
+
+    $offer = Offer::create([
+        'install_request_id' => $installRequest->id,
+        'expert_user_id' => $expert->id,
+        'is_free' => true,
+        'message' => 'Ok',
+        'status' => OfferStatus::ACCEPTED,
+        'currency' => 'USD',
+    ]);
+
+    $installRequest->update(['accepted_offer_id' => $offer->id]);
+
+    $installRequest->update(['status' => InstallRequestStatus::CLOSED]);
+    $installRequest->refresh();
+
+    expect($installRequest->status)->toBe(InstallRequestStatus::CLOSED);
+
+    $this->actingAs($expert)
+        ->get(route('expert.assignments'))
+        ->assertOk()
+        ->assertSee($installRequest->title, escape: false);
+});

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\InstallRequestStatus;
 use App\Models\InstallRequest;
 use App\Models\Offer;
 use Livewire\Attributes\Layout;
@@ -12,6 +13,19 @@ new #[Layout('components.layouts.app')] class extends Component {
     {
         $this->installRequest = $installRequest->load(['pendingOffers.expert', 'acceptedOffer.expert', 'user']);
         $this->authorize('view', $this->installRequest);
+    }
+
+    public function markInstallComplete(): void
+    {
+        $this->authorize('complete', $this->installRequest);
+
+        if ($this->installRequest->status !== InstallRequestStatus::MATCHED) {
+            return;
+        }
+
+        $this->installRequest->update(['status' => InstallRequestStatus::CLOSED]);
+        $this->installRequest->refresh()->load(['pendingOffers.expert', 'acceptedOffer.expert', 'user']);
+        $this->dispatch('install-marked-complete');
     }
 
     public function acceptOffer(int $offerId): void
@@ -32,11 +46,11 @@ new #[Layout('components.layouts.app')] class extends Component {
     {
         $this->authorize('cancel', $this->installRequest);
 
-        if ($this->installRequest->status->value !== 'open') {
+        if ($this->installRequest->status !== InstallRequestStatus::OPEN) {
             return;
         }
 
-        $this->installRequest->update(['status' => \App\Enums\InstallRequestStatus::CANCELLED]);
+        $this->installRequest->update(['status' => InstallRequestStatus::CANCELLED]);
         $this->redirect(route('requests.index'), navigate: false);
     }
 }; ?>
@@ -54,9 +68,14 @@ new #[Layout('components.layouts.app')] class extends Component {
                 · {{ __($installRequest->status->value) }}
             </flux:subheading>
         </div>
-        @if ($installRequest->status === \App\Enums\InstallRequestStatus::OPEN)
+        @if ($installRequest->status === InstallRequestStatus::OPEN)
             <flux:button variant="danger" wire:click="cancelRequest" wire:confirm="{{ __('Cancel this request?') }}">
                 {{ __('Cancel request') }}
+            </flux:button>
+        @endif
+        @if ($installRequest->status === InstallRequestStatus::MATCHED)
+            <flux:button variant="primary" wire:click="markInstallComplete" wire:confirm="{{ __('Mark this install as complete? The expert will see it under completed assignments.') }}">
+                {{ __('Mark install complete') }}
             </flux:button>
         @endif
     </div>
@@ -72,6 +91,12 @@ new #[Layout('components.layouts.app')] class extends Component {
             <flux:heading size="sm">{{ __('Hardware notes') }}</flux:heading>
             <p class="mt-1 text-sm text-zinc-600 dark:text-zinc-300">{{ $installRequest->hardware_notes }}</p>
         </div>
+    @endif
+
+    @if ($installRequest->status === InstallRequestStatus::CLOSED && $installRequest->acceptedOffer)
+        <flux:callout variant="success" class="mt-6" icon="check-circle">
+            {{ __('This install is marked complete. Thank you for using Linux Installation Centers.') }}
+        </flux:callout>
     @endif
 
     @if ($installRequest->acceptedOffer)
@@ -94,7 +119,7 @@ new #[Layout('components.layouts.app')] class extends Component {
 
     <flux:heading class="mt-8" size="lg">{{ __('Offers from experts') }}</flux:heading>
 
-    @if ($installRequest->status === \App\Enums\InstallRequestStatus::OPEN && $installRequest->pendingOffers->isEmpty())
+    @if ($installRequest->status === InstallRequestStatus::OPEN && $installRequest->pendingOffers->isEmpty())
         <p class="mt-2 text-sm text-zinc-500">{{ __('No pending offers yet.') }}</p>
     @endif
 
@@ -116,7 +141,7 @@ new #[Layout('components.layouts.app')] class extends Component {
                             <p class="mt-2 text-sm">{{ $offer->message }}</p>
                         @endif
                     </div>
-                    @if ($installRequest->status === \App\Enums\InstallRequestStatus::OPEN)
+                    @if ($installRequest->status === InstallRequestStatus::OPEN)
                         <flux:button variant="primary" wire:click="acceptOffer({{ $offer->id }})" wire:confirm="{{ __('Accept this offer? Other pending offers will be declined.') }}">
                             {{ __('Accept offer') }}
                         </flux:button>

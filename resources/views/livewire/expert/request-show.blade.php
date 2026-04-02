@@ -20,7 +20,7 @@ new #[Layout('components.layouts.app')] class extends Component {
     public function mount(InstallRequest $installRequest): void
     {
         $this->authorize('view', $installRequest);
-        $this->installRequest = $installRequest->load('user');
+        $this->installRequest = $installRequest->load(['user', 'acceptedOffer.expert', 'offers']);
 
         $existing = Offer::query()
             ->where('install_request_id', $installRequest->id)
@@ -102,11 +102,35 @@ new #[Layout('components.layouts.app')] class extends Component {
         </p>
     @endif
 
-    @if ($installRequest->status !== InstallRequestStatus::OPEN)
+    @php
+        $authExpert = Auth::user();
+        $myOffer = $installRequest->offers->firstWhere('expert_user_id', $authExpert->id);
+        $iAmAcceptedExpert = $installRequest->acceptedOffer
+            && (int) $installRequest->acceptedOffer->expert_user_id === (int) $authExpert->id;
+    @endphp
+
+    @if ($installRequest->status === InstallRequestStatus::MATCHED && $iAmAcceptedExpert)
+        <flux:callout variant="success" class="mt-6" icon="check-circle">
+            <p class="font-medium">{{ __('Your offer was accepted. You are the assigned expert.') }}</p>
+            <p class="mt-2 text-sm">{{ __('Seeker') }}: {{ $installRequest->user->name }} — {{ $installRequest->user->email }}</p>
+            <flux:link :href="route('expert.assignments')" class="mt-2 inline-block text-sm font-medium" wire:navigate>{{ __('View all assignments') }}</flux:link>
+        </flux:callout>
+    @elseif ($installRequest->status === InstallRequestStatus::CLOSED && $iAmAcceptedExpert)
+        <flux:callout variant="success" class="mt-6" icon="check-circle">
+            {{ __('This install is complete. It appears under Completed on your assignments page.') }}
+            <flux:link :href="route('expert.assignments')" class="mt-2 inline-block text-sm font-medium" wire:navigate>{{ __('My assignments') }}</flux:link>
+        </flux:callout>
+    @elseif ($installRequest->status === InstallRequestStatus::MATCHED && $myOffer && ! $iAmAcceptedExpert)
+        <flux:callout variant="info" class="mt-6" icon="information-circle">
+            {{ __('Another expert was selected for this request.') }}
+        </flux:callout>
+    @elseif ($installRequest->status !== InstallRequestStatus::OPEN)
         <flux:callout variant="info" class="mt-6" icon="information-circle">
             {{ __('This request is no longer open for new offers.') }}
         </flux:callout>
-    @else
+    @endif
+
+    @if ($installRequest->status === InstallRequestStatus::OPEN)
         <flux:heading class="mt-8" size="lg">{{ __('Your offer') }}</flux:heading>
 
         @if (! Auth::user()->expertProfileComplete())

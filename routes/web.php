@@ -46,6 +46,7 @@ Route::middleware(['auth', 'verified', 'active', 'role:expert'])->group(function
     })->name('expert.dashboard');
 
     Route::livewire('expert/profile', 'expert.edit-profile')->name('expert.profile');
+    Route::livewire('expert/assignments', 'expert.my-assignments')->name('expert.assignments');
     Route::livewire('expert/requests', 'expert.browse-requests')->name('expert.requests.index');
     Route::livewire('expert/requests/{installRequest}', 'expert.request-show')->name('expert.requests.show');
 });
