@@ -1,11 +1,29 @@
 <x-layouts.app :title="__('Expert Dashboard')">
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in as an expert!") }}
-                </div>
-            </div>
+    <div class="flex h-full w-full flex-1 flex-col gap-6 rounded-xl">
+        <div>
+            <flux:heading size="xl">{{ __('Expert dashboard') }}</flux:heading>
+            <flux:subheading class="mt-1">{{ __('Browse install requests in your city and send offers.') }}</flux:subheading>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2">
+            <flux:card class="p-6">
+                <flux:heading size="lg">{{ __('Open requests') }}</flux:heading>
+                <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                    {{ __('Matched to the city and country on your expert profile.') }}
+                </p>
+                <flux:button class="mt-4" :href="route('expert.requests.index')" variant="primary" wire:navigate>
+                    {{ __('Browse requests') }}
+                </flux:button>
+            </flux:card>
+            <flux:card class="p-6">
+                <flux:heading size="lg">{{ __('Your profile') }}</flux:heading>
+                <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                    {{ __('Bio, city, and country are required before you can submit offers.') }}
+                </p>
+                <flux:button class="mt-4" :href="route('expert.profile')" variant="filled" wire:navigate>
+                    {{ __('Edit profile') }}
+                </flux:button>
+            </flux:card>
         </div>
     </div>
 </x-layouts.app>

@@ -1,10 +1,10 @@
 <?php
 
-use App\Models\User;
-use App\Models\ExpertProfile;
 use App\Enums\UserRole;
-use Livewire\Volt\Volt;
+use App\Models\ExpertProfile;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
 
@@ -26,16 +26,18 @@ test('non-experts cannot access profile page', function () {
 
 test('experts can update their profile', function () {
     $user = User::factory()->create(['role' => UserRole::EXPERT]);
-    
+
     // Create initial profile
     ExpertProfile::create([
         'user_id' => $user->id,
         'bio' => 'Old bio',
     ]);
 
-    Volt::actingAs($user)
+    Livewire::actingAs($user)
         ->test('expert.edit-profile')
         ->set('bio', 'New bio')
+        ->set('city', 'Lahore')
+        ->set('country', 'Pakistan')
         ->set('location', 'New York')
         ->set('hourly_rate', 100)
         ->call('save')
@@ -44,6 +46,8 @@ test('experts can update their profile', function () {
     $this->assertDatabaseHas('expert_profiles', [
         'user_id' => $user->id,
         'bio' => 'New bio',
+        'city' => 'Lahore',
+        'country' => 'Pakistan',
         'location' => 'New York',
         'hourly_rate' => 100,
     ]);

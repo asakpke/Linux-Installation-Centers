@@ -23,7 +23,7 @@ class ExpertDashboardTest extends TestCase
         $response = $this->actingAs($expertUser)->get(route('expert.dashboard'));
 
         $response->assertStatus(200);
-        $response->assertSeeText(__("You're logged in as an expert!"));
+        $response->assertSeeText(__('Expert dashboard'));
     }
 
     /**

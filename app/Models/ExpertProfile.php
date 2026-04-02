@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
 
 class ExpertProfile extends Model
 {
     protected $fillable = [
         'user_id',
         'bio',
+        'city',
+        'country',
         'location',
         'website',
         'hourly_rate',

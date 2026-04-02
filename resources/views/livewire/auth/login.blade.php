@@ -40,6 +40,15 @@ new #[Layout('components.layouts.auth')] class extends Component {
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
 
+        if (! Auth::user()->is_active) {
+            Auth::logout();
+            Session::regenerate();
+
+            throw ValidationException::withMessages([
+                'email' => __('This account has been disabled.'),
+            ]);
+        }
+
         $role = Auth::user()->role;
         $default = match ($role) {
             \App\Enums\UserRole::ADMIN => route('admin.dashboard', [], false),

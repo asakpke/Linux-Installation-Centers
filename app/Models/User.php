@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\UserRole;
+use Database\Factories\UserFactory;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Enums\UserRole;
 use Illuminate\Support\Str;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
     /**
@@ -24,6 +26,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'is_active',
     ];
 
     /**
@@ -47,12 +50,53 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'role' => UserRole::class,
+            'is_active' => 'boolean',
         ];
     }
 
     public function expertProfile()
     {
         return $this->hasOne(ExpertProfile::class);
+    }
+
+    public function installRequests(): HasMany
+    {
+        return $this->hasMany(InstallRequest::class);
+    }
+
+    public function offersAsExpert(): HasMany
+    {
+        return $this->hasMany(Offer::class, 'expert_user_id');
+    }
+
+    public function expertProfileComplete(): bool
+    {
+        if ($this->role !== UserRole::EXPERT) {
+            return false;
+        }
+
+        $profile = $this->expertProfile;
+
+        if (! $profile) {
+            return false;
+        }
+
+        return filled(trim((string) $profile->bio))
+            && filled(trim((string) $profile->city))
+            && filled(trim((string) $profile->country));
+    }
+
+    /**
+     * When APP_ENV=local, treat the account as verified so you can develop without mail.
+     * Staging/production still require a real verified email.
+     */
+    public function hasVerifiedEmail(): bool
+    {
+        if (app()->isLocal()) {
+            return true;
+        }
+
+        return $this->email_verified_at !== null;
     }
 
     /**

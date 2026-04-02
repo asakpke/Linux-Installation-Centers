@@ -14,16 +14,16 @@
                     </div>
                 </a>
             </flux:card>
-            <flux:card class="p-4 opacity-75">
-                <div class="flex items-center gap-3">
-                    <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-100 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400">
-                        <flux:icon name="cog-6-tooth" class="size-6" />
+            <flux:card class="p-4">
+                <a href="{{ route('admin.requests.index') }}" class="flex items-center gap-3" wire:navigate>
+                    <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-sky-100 dark:bg-sky-900/30 text-sky-600 dark:text-sky-400">
+                        <flux:icon name="document-text" class="size-6" />
                     </span>
                     <div>
-                        <span class="font-medium text-zinc-600 dark:text-zinc-400">{{ __('More options') }}</span>
-                        <p class="text-sm text-zinc-500 dark:text-zinc-400">{{ __('Coming soon') }}</p>
+                        <span class="font-medium">{{ __('Install requests') }}</span>
+                        <p class="text-sm text-zinc-500 dark:text-zinc-400">{{ __('View and moderate requests') }}</p>
                     </div>
-                </div>
+                </a>
             </flux:card>
         </div>
     </div>

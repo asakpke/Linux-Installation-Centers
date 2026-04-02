@@ -1,18 +1,29 @@
 <x-layouts.app :title="__('Dashboard')">
-    <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
-        <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
-            </div>
-            <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
-            </div>
-            <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
-            </div>
+    <div class="flex h-full w-full flex-1 flex-col gap-6 rounded-xl">
+        <div>
+            <flux:heading size="xl">{{ __('Welcome') }}</flux:heading>
+            <flux:subheading class="mt-1">{{ __('Find a local expert to help install Linux on your computer.') }}</flux:subheading>
         </div>
-        <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-            <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
+
+        <div class="grid gap-4 md:grid-cols-2">
+            <flux:card class="p-6">
+                <flux:heading size="lg">{{ __('Install requests') }}</flux:heading>
+                <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                    {{ __('Post your city and what you need. Experts in your area can send offers.') }}
+                </p>
+                <flux:button class="mt-4" :href="route('requests.index')" variant="primary" wire:navigate>
+                    {{ __('My requests') }}
+                </flux:button>
+            </flux:card>
+            <flux:card class="p-6">
+                <flux:heading size="lg">{{ __('New request') }}</flux:heading>
+                <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                    {{ __('Describe your hardware and goals so experts can prepare.') }}
+                </p>
+                <flux:button class="mt-4" :href="route('requests.create')" variant="filled" wire:navigate>
+                    {{ __('Create request') }}
+                </flux:button>
+            </flux:card>
         </div>
     </div>
 </x-layouts.app>

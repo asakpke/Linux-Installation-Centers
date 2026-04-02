@@ -8,7 +8,9 @@
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
             @php
-                $isExpert = auth()->user()->role === \App\Enums\UserRole::EXPERT;
+                $role = auth()->user()->role;
+                $isExpert = $role === \App\Enums\UserRole::EXPERT;
+                $isUser = $role === \App\Enums\UserRole::USER;
             @endphp
             <a href="{{ $isExpert ? route('expert.dashboard') : route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
                 <x-app-logo />
@@ -18,7 +20,11 @@
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     @if($isExpert)
                         <flux:navlist.item icon="home" :href="route('expert.dashboard')" :current="request()->routeIs('expert.dashboard')" wire:navigate>{{ __('Expert Dashboard') }}</flux:navlist.item>
+                        <flux:navlist.item icon="map-pin" :href="route('expert.requests.index')" :current="request()->routeIs('expert.requests.*')" wire:navigate>{{ __('Open requests') }}</flux:navlist.item>
                         <flux:navlist.item icon="user-circle" :href="route('expert.profile')" :current="request()->routeIs('expert.profile')" wire:navigate>{{ __('Expert Profile') }}</flux:navlist.item>
+                    @elseif($isUser)
+                        <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                        <flux:navlist.item icon="document-text" :href="route('requests.index')" :current="request()->routeIs('requests.*')" wire:navigate>{{ __('Install requests') }}</flux:navlist.item>
                     @else
                         <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
                     @endif

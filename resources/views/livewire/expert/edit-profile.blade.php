@@ -7,8 +7,15 @@ use Livewire\Component;
 
 new #[Layout('components.layouts.app')] class extends Component {
     public string $bio = '';
+
+    public string $city = '';
+
+    public string $country = '';
+
     public string $location = '';
+
     public string $website = '';
+
     public string $hourly_rate = '';
 
     public function mount(): void
@@ -17,6 +24,8 @@ new #[Layout('components.layouts.app')] class extends Component {
 
         if ($profile) {
             $this->bio = $profile->bio ?? '';
+            $this->city = $profile->city ?? '';
+            $this->country = $profile->country ?? '';
             $this->location = $profile->location ?? '';
             $this->website = $profile->website ?? '';
             $this->hourly_rate = $profile->hourly_rate !== null && $profile->hourly_rate !== ''
@@ -29,6 +38,8 @@ new #[Layout('components.layouts.app')] class extends Component {
     {
         $validated = $this->validate([
             'bio' => ['nullable', 'string', 'max:1000'],
+            'city' => ['nullable', 'string', 'max:120'],
+            'country' => ['nullable', 'string', 'max:120'],
             'location' => ['nullable', 'string', 'max:255'],
             'website' => ['nullable', 'url', 'max:255'],
             'hourly_rate' => ['nullable', 'numeric', 'min:0'],
@@ -56,11 +67,25 @@ new #[Layout('components.layouts.app')] class extends Component {
                 :placeholder="__('Tell us about your expertise...')"
             />
 
+            <div class="grid gap-4 sm:grid-cols-2">
+                <flux:input
+                    wire:model="city"
+                    :label="__('City')"
+                    type="text"
+                    :placeholder="__('For matching with seekers')"
+                />
+                <flux:input
+                    wire:model="country"
+                    :label="__('Country')"
+                    type="text"
+                />
+            </div>
+
             <flux:input
                 wire:model="location"
-                :label="__('Location')"
+                :label="__('Location line (optional)')"
                 type="text"
-                :placeholder="__('City, Country')"
+                :placeholder="__('Neighborhood, landmark…')"
             />
 
             <flux:input

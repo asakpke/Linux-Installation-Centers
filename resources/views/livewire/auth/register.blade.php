@@ -31,7 +31,13 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         Auth::login($user);
 
-        $this->redirectIntended(route('dashboard', absolute: false), navigate: true);
+        if (app()->isLocal()) {
+            $this->redirect(route('dashboard', absolute: false), navigate: true);
+
+            return;
+        }
+
+        $this->redirect(route('verification.notice', absolute: false), navigate: true);
     }
 }; ?>
 

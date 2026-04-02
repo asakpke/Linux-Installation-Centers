@@ -16,6 +16,8 @@ new #[Layout('components.layouts.app.admin')] class extends Component {
     public string $password_confirmation = '';
     public string $role = 'user';
 
+    public bool $is_active = true;
+
     public function mount(?User $user = null): void
     {
         $this->user = $user;
@@ -24,6 +26,7 @@ new #[Layout('components.layouts.app.admin')] class extends Component {
             $this->name = $this->user->name;
             $this->email = $this->user->email;
             $this->role = $this->user->role->value;
+            $this->is_active = $this->user->is_active;
         }
     }
 
@@ -47,6 +50,7 @@ new #[Layout('components.layouts.app.admin')] class extends Component {
             $this->user->name = $validated['name'];
             $this->user->email = $validated['email'];
             $this->user->role = UserRole::from($validated['role']);
+            $this->user->is_active = $this->is_active;
             if (! empty($validated['password'])) {
                 $this->user->password = Hash::make($validated['password']);
             }
@@ -60,6 +64,7 @@ new #[Layout('components.layouts.app.admin')] class extends Component {
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => UserRole::from($validated['role']),
+            'is_active' => $this->is_active,
         ]);
 
         $this->redirect(route('admin.users.index'), navigate: true);
@@ -133,6 +138,8 @@ new #[Layout('components.layouts.app.admin')] class extends Component {
             <flux:select.option value="expert">{{ __('Expert') }}</flux:select.option>
             <flux:select.option value="admin">{{ __('Admin') }}</flux:select.option>
         </flux:select>
+
+        <flux:checkbox wire:model="is_active" :label="__('Account active')" />
 
         <div class="flex flex-wrap items-center gap-3">
             <flux:button type="submit" variant="primary">
