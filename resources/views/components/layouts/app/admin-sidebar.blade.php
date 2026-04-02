@@ -25,12 +25,6 @@
                 Powered by <a href="https://www.esite.pk" target="_blank" rel="noopener noreferrer" class="hover:underline">RoshanTech</a> · <a href="https://www.esite.pk" target="_blank" rel="noopener noreferrer" class="hover:underline">www.eSite.pk</a>
             </p>
 
-            <flux:navlist variant="outline">
-                <flux:navlist.item icon="folder-git-2" href="https://github.com/asakpke/Linux-Installation-Centers" target="_blank">
-                    {{ __('Repository') }}
-                </flux:navlist.item>
-            </flux:navlist>
-
             <!-- Desktop User Menu -->
             <flux:dropdown class="hidden lg:block" position="bottom" align="start">
                 <flux:profile

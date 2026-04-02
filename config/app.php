@@ -13,7 +13,19 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Linux Installation Centers'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Short name (sidebar / compact UI)
+    |--------------------------------------------------------------------------
+    |
+    | Used in dashboard sidebars where horizontal space is limited. The full
+    | APP_NAME remains for page titles, emails, and auth layouts.
+    |
+    */
+
+    'display_name' => env('APP_DISPLAY_NAME', 'Linux ICs'),
 
     /*
     |--------------------------------------------------------------------------
