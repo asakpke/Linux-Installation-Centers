@@ -95,6 +95,66 @@ class InstallRequestPolicy
             && $installRequest->status === InstallRequestStatus::MATCHED;
     }
 
+    /**
+     * View the coordination message thread (seeker, assigned expert, or admin).
+     */
+    public function viewMessages(User $user, InstallRequest $installRequest): bool
+    {
+        if (! $user->is_active) {
+            return false;
+        }
+
+        if ($installRequest->accepted_offer_id === null) {
+            return false;
+        }
+
+        if ($user->role === UserRole::ADMIN) {
+            return true;
+        }
+
+        if ($installRequest->user_id === $user->id) {
+            return true;
+        }
+
+        return $this->userIsAcceptedExpert($user, $installRequest);
+    }
+
+    /**
+     * Post a new message (seeker or assigned expert only, while the job is active).
+     */
+    public function postMessage(User $user, InstallRequest $installRequest): bool
+    {
+        if (! $user->is_active) {
+            return false;
+        }
+
+        if ($installRequest->status !== InstallRequestStatus::MATCHED) {
+            return false;
+        }
+
+        if ($installRequest->accepted_offer_id === null) {
+            return false;
+        }
+
+        if ($installRequest->user_id === $user->id) {
+            return true;
+        }
+
+        return $this->userIsAcceptedExpert($user, $installRequest);
+    }
+
+    private function userIsAcceptedExpert(User $user, InstallRequest $installRequest): bool
+    {
+        if ($user->role !== UserRole::EXPERT) {
+            return false;
+        }
+
+        $installRequest->loadMissing('acceptedOffer');
+
+        return $installRequest->acceptedOffer !== null
+            && (int) $installRequest->acceptedOffer->expert_user_id === (int) $user->id;
+    }
+
     public function expertCanAccessRequest(User $user, InstallRequest $installRequest): bool
     {
         if ($user->role !== UserRole::EXPERT) {

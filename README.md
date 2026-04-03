@@ -1,6 +1,6 @@
 # Linux Installation Centers (Linux ICs)
 
-**Website:** [https://linux-installation-centers.esite.pk/](https://linux-installation-centers.esite.pk/)
+**Website:** [https://Linux-Installation-Centers.eSite.pk](https://linux-installation-centers.esite.pk/)
 
 Linux ICs is a platform that connects new Linux users with local experts for offline installation and distro selection support, addressing the complexity and inaccessibility of adopting Linux. By offering location-based matching, beginner-friendly guidance, and flexible free or paid services, Linux ICs empowers users to transition to Linux seamlessly while providing experts a platform to share expertise and earn income. With a growing interest in open-source software, and a fragmented support landscape, Linux ICs fills a critical gap, targeting a global market of tech enthusiasts, students, and professionals.
 

@@ -55,6 +55,11 @@ class InstallRequest extends Model
         return $this->belongsTo(Offer::class, 'accepted_offer_id');
     }
 
+    public function messages(): HasMany
+    {
+        return $this->hasMany(InstallRequestMessage::class);
+    }
+
     public function isOpen(): bool
     {
         return $this->status === InstallRequestStatus::OPEN;

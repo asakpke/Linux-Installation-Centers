@@ -65,4 +65,8 @@ new #[Layout('components.layouts.app.admin')] class extends Component {
             <p class="text-zinc-500">{{ __('No offers.') }}</p>
         @endforelse
     </div>
+
+    @can('viewMessages', $installRequest)
+        <livewire:install-request.message-thread :install-request="$installRequest" wire:key="ir-msg-admin-{{ $installRequest->id }}" />
+    @endcan
 </div>

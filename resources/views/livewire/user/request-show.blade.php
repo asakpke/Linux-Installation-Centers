@@ -117,6 +117,10 @@ new #[Layout('components.layouts.app')] class extends Component {
         </flux:card>
     @endif
 
+    @can('viewMessages', $installRequest)
+        <livewire:install-request.message-thread :install-request="$installRequest" wire:key="ir-msg-user-{{ $installRequest->id }}" />
+    @endcan
+
     <flux:heading class="mt-8" size="lg">{{ __('Offers from experts') }}</flux:heading>
 
     @if ($installRequest->status === InstallRequestStatus::OPEN && $installRequest->pendingOffers->isEmpty())

@@ -130,6 +130,10 @@ new #[Layout('components.layouts.app')] class extends Component {
         </flux:callout>
     @endif
 
+    @can('viewMessages', $installRequest)
+        <livewire:install-request.message-thread :install-request="$installRequest" wire:key="ir-msg-expert-{{ $installRequest->id }}" />
+    @endcan
+
     @if ($installRequest->status === InstallRequestStatus::OPEN)
         <flux:heading class="mt-8" size="lg">{{ __('Your offer') }}</flux:heading>
 
