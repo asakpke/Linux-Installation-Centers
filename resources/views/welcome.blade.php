@@ -6,6 +6,8 @@
         <title>Linux Installation Centers</title>
         <link rel="icon" href="/favicon.ico" sizes="any">
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
@@ -38,20 +40,19 @@
         </header>
 
         <div class="landing max-w-5xl mx-auto px-4 sm:px-6 pb-16">
-            {{-- Hero --}}
-            <section class="text-center mb-14 lg:mb-18">
-                <div class="inline-flex items-center justify-center w-24 h-24 lg:w-32 lg:h-32 rounded-2xl bg-[#e8f0fe] dark:bg-[#1e3a5f] text-[#2563eb] dark:text-[#60a5fa] mb-6" aria-hidden="true">
-                    <svg class="w-12 h-12 lg:w-16 lg:h-16" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 20h40v32H12V20z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M20 52V20M32 52V20M44 52V20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        <circle cx="22" cy="14" r="2" fill="currentColor"/>
-                        <path d="M8 28h48" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        <circle cx="32" cy="44" r="6" stroke="currentColor" stroke-width="2"/>
-                        <path d="M32 40v4M29 42h6M32 46v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                    </svg>
+            {{-- Hero: always logo left, headline + tagline right (row at all widths) --}}
+            <section class="mb-14 lg:mb-18">
+                <div class="flex flex-row items-center gap-4 text-left sm:gap-6 lg:gap-8">
+                    <x-brand-logo-mark decorative />
+                    <div class="min-w-0 flex-1">
+                        <h1 class="mb-3 text-3xl font-semibold tracking-tight text-[#1b1b18] dark:text-white sm:text-4xl lg:text-5xl">
+                            Linux Installation Centers
+                        </h1>
+                        <p class="text-lg text-[#4b5563] dark:text-[#A1A09A] sm:text-xl lg:max-w-2xl">
+                            Get help switching to Linux—or help others make the switch. Connect with local experts for installation and distro advice.
+                        </p>
+                    </div>
                 </div>
-                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[#1b1b18] dark:text-white mb-3 tracking-tight">Linux Installation Centers</h1>
-                <p class="text-lg sm:text-xl text-[#4b5563] dark:text-[#A1A09A] max-w-2xl mx-auto">Get help switching to Linux—or help others make the switch. Connect with local experts for installation and distro advice.</p>
             </section>
 
             {{-- Who it's for: two cards --}}

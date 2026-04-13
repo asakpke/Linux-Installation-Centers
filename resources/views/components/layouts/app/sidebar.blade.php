@@ -12,7 +12,7 @@
                 $isExpert = $role === \App\Enums\UserRole::EXPERT;
                 $isUser = $role === \App\Enums\UserRole::USER;
             @endphp
-            <a href="{{ $isExpert ? route('expert.dashboard') : route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
+            <a href="{{ $isExpert ? route('expert.dashboard') : route('dashboard') }}" class="me-5 flex min-w-0 max-w-full items-center space-x-2 rtl:space-x-reverse" wire:navigate>
                 <x-app-logo />
             </a>
 
