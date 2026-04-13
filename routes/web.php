@@ -9,6 +9,13 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
+Route::get('whats-new', function () {
+    return view('changelog', [
+        'title' => __("What's new").' · '.config('app.name'),
+        'github_url' => 'https://github.com/asakpke/Linux-Installation-Centers',
+    ]);
+})->name('whats-new');
+
 Route::get('dashboard', function () {
     $user = auth()->user();
     if ($user->role === UserRole::ADMIN) {
