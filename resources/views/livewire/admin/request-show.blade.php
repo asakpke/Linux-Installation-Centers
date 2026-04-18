@@ -26,6 +26,15 @@ new #[Layout('components.layouts.app.admin')] class extends Component {
         $this->installRequest->refresh();
         $this->dispatch('request-cancelled');
     }
+
+    public function markAsSpam(): void
+    {
+        $this->authorize('markAsSpam', $this->installRequest);
+
+        $this->installRequest->update(['status' => InstallRequestStatus::SPAM]);
+        $this->installRequest->refresh();
+        $this->dispatch('request-marked-spam');
+    }
 }; ?>
 
 <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
@@ -42,6 +51,16 @@ new #[Layout('components.layouts.app.admin')] class extends Component {
             {{ __('Cancel request') }}
         </flux:button>
     @endif
+
+    @can('markAsSpam', $installRequest)
+        <flux:button class="mt-2" variant="filled" wire:click="markAsSpam" wire:confirm="{{ __('Mark this install request as spam or not a legitimate LIR? Experts will lose access.') }}">
+            {{ __('Mark as spam / invalid LIR') }}
+        </flux:button>
+    @endcan
+
+    <x-action-message class="mt-2" on="request-marked-spam">
+        {{ __('Marked as spam.') }}
+    </x-action-message>
 
     @if ($installRequest->body)
         <flux:card class="p-4 text-sm">{!! nl2br(e($installRequest->body)) !!}</flux:card>

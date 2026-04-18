@@ -40,7 +40,28 @@
                     <span class="absolute -start-[calc(0.5rem+1px)] mt-1.5 h-3 w-3 rounded-full border-2 border-[#1b1b18] bg-[#FDFDFC] dark:border-white dark:bg-[#0a0a0a]"></span>
                     <article>
                         <header class="mb-3">
-                            <time class="text-sm font-semibold text-[#2563eb] dark:text-[#60a5fa]" datetime="2026-04-13">
+                            <time class="text-sm font-semibold text-[#2563eb] dark:text-[#60a5fa]" datetime="2026-04-18">
+                                18 April 2026
+                            </time>
+                            <p class="text-xs text-[#6b7280] dark:text-[#9ca3af]">
+                                {{ __('Milestone 3 — trust, profiles, and moderation') }}
+                            </p>
+                        </header>
+                        <ul class="list-inside list-disc space-y-2 text-sm leading-relaxed text-[#374151] dark:text-[#d1d5db]">
+                            <li>{{ __('Post-completion reviews (1–5 stars) for both seeker and expert on closed jobs.') }}</li>
+                            <li>{{ __('Optional public profiles at /profiles/{slug} with reviews; Settings → Public profile for seekers and experts.') }}</li>
+                            <li>{{ __('Report install requests or counterparty users; admin reports queue with dismiss / actioned.') }}</li>
+                            <li>{{ __('Admin can mark an install request as spam (experts lose access; seeker still sees a notice).') }}</li>
+                            <li>{{ __('Reputation summary on seeker and expert dashboards.') }}</li>
+                        </ul>
+                    </article>
+                </li>
+
+                <li class="relative">
+                    <span class="absolute -start-[calc(0.5rem+1px)] mt-1.5 h-3 w-3 rounded-full border-2 border-[#d1d5db] bg-[#FDFDFC] dark:border-[#525252] dark:bg-[#0a0a0a]"></span>
+                    <article>
+                        <header class="mb-3">
+                            <time class="text-sm font-semibold text-[#1b1b18] dark:text-white" datetime="2026-04-13">
                                 13 April 2026
                             </time>
                             <p class="text-xs text-[#6b7280] dark:text-[#9ca3af]">

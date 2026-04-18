@@ -16,6 +16,8 @@ Route::get('whats-new', function () {
     ]);
 })->name('whats-new');
 
+Route::livewire('profiles/{public_slug}', 'profile.public-show')->name('profiles.show');
+
 Route::get('dashboard', function () {
     $user = auth()->user();
     if ($user->role === UserRole::ADMIN) {
@@ -34,6 +36,7 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
     Route::livewire('settings/profile', 'settings.profile')->name('settings.profile');
+    Route::livewire('settings/public-profile', 'settings.public-profile')->name('settings.public-profile');
     Route::livewire('settings/password', 'settings.password')->name('settings.password');
     Route::livewire('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
@@ -69,4 +72,7 @@ Route::middleware(['auth', 'verified', 'active', 'role:admin'])->prefix('admin')
 
     Route::livewire('requests', 'admin.requests-index')->name('requests.index');
     Route::livewire('requests/{installRequest}', 'admin.request-show')->name('requests.show');
+
+    Route::livewire('reports', 'admin.reports-index')->name('reports.index');
+    Route::livewire('reports/{report}', 'admin.report-show')->name('reports.show');
 });

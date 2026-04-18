@@ -5,6 +5,8 @@
             <flux:subheading class="mt-1">{{ __('Find a local expert to help install Linux on your computer.') }}</flux:subheading>
         </div>
 
+        <livewire:reputation-summary />
+
         <div class="grid gap-4 md:grid-cols-2">
             <flux:card class="p-6">
                 <flux:heading size="lg">{{ __('Install requests') }}</flux:heading>

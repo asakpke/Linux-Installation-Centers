@@ -4,6 +4,7 @@ use App\Enums\InstallRequestStatus;
 use App\Models\InstallRequest;
 use App\Models\Offer;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 new #[Layout('components.layouts.app')] class extends Component {
@@ -11,7 +12,7 @@ new #[Layout('components.layouts.app')] class extends Component {
 
     public function mount(InstallRequest $installRequest): void
     {
-        $this->installRequest = $installRequest->load(['pendingOffers.expert', 'acceptedOffer.expert', 'user']);
+        $this->installRequest = $installRequest->load(['pendingOffers.expert', 'acceptedOffer.expert', 'user', 'reviews']);
         $this->authorize('view', $this->installRequest);
     }
 
@@ -24,7 +25,7 @@ new #[Layout('components.layouts.app')] class extends Component {
         }
 
         $this->installRequest->update(['status' => InstallRequestStatus::CLOSED]);
-        $this->installRequest->refresh()->load(['pendingOffers.expert', 'acceptedOffer.expert', 'user']);
+        $this->installRequest->refresh()->load(['pendingOffers.expert', 'acceptedOffer.expert', 'user', 'reviews']);
         $this->dispatch('install-marked-complete');
     }
 
@@ -38,7 +39,7 @@ new #[Layout('components.layouts.app')] class extends Component {
             ->firstOrFail();
 
         $this->installRequest->acceptOffer($offer);
-        $this->installRequest->refresh()->load(['pendingOffers.expert', 'acceptedOffer.expert']);
+        $this->installRequest->refresh()->load(['pendingOffers.expert', 'acceptedOffer.expert', 'reviews']);
         $this->dispatch('offer-accepted');
     }
 
@@ -52,6 +53,12 @@ new #[Layout('components.layouts.app')] class extends Component {
 
         $this->installRequest->update(['status' => InstallRequestStatus::CANCELLED]);
         $this->redirect(route('requests.index'), navigate: false);
+    }
+
+    #[On('review-submitted')]
+    public function refreshAfterReview(): void
+    {
+        $this->installRequest->refresh()->load(['pendingOffers.expert', 'acceptedOffer.expert', 'user', 'reviews']);
     }
 }; ?>
 
@@ -80,6 +87,12 @@ new #[Layout('components.layouts.app')] class extends Component {
         @endif
     </div>
 
+    @if ($installRequest->status === InstallRequestStatus::SPAM)
+        <flux:callout variant="danger" class="mt-6" icon="exclamation-triangle">
+            {{ __('This request was removed as spam or not a legitimate Linux installation request. If you believe this is a mistake, contact support.') }}
+        </flux:callout>
+    @endif
+
     @if ($installRequest->body)
         <flux:card class="prose dark:prose-invert mt-6 max-w-none p-4">
             {!! nl2br(e($installRequest->body)) !!}
@@ -103,7 +116,13 @@ new #[Layout('components.layouts.app')] class extends Component {
         <flux:card class="mt-6 border-emerald-200 bg-emerald-50/50 p-4 dark:border-emerald-900 dark:bg-emerald-950/30">
             <flux:heading size="sm">{{ __('Accepted expert') }}</flux:heading>
             <p class="mt-2 font-medium">{{ $installRequest->acceptedOffer->expert->name }}</p>
-            <p class="text-sm text-zinc-600 dark:text-zinc-400">{{ $installRequest->acceptedOffer->expert->email }}</p>
+            @if ($installRequest->acceptedOffer->expert->public_profile_enabled && $installRequest->acceptedOffer->expert->public_slug)
+                <p class="mt-1 text-sm">
+                    <flux:link :href="route('profiles.show', ['public_slug' => $installRequest->acceptedOffer->expert->public_slug])" wire:navigate>{{ __('Public profile') }}</flux:link>
+                </p>
+            @else
+                <p class="text-sm text-zinc-600 dark:text-zinc-400">{{ $installRequest->acceptedOffer->expert->email }}</p>
+            @endif
             <p class="mt-2 text-sm">
                 @if ($installRequest->acceptedOffer->is_free)
                     {{ __('Free service') }}
@@ -115,6 +134,20 @@ new #[Layout('components.layouts.app')] class extends Component {
                 <p class="mt-2 text-sm">{{ $installRequest->acceptedOffer->message }}</p>
             @endif
         </flux:card>
+    @endif
+
+    @if ($installRequest->status === InstallRequestStatus::CLOSED && $installRequest->acceptedOffer)
+        <livewire:install-request.post-review :install-request="$installRequest" wire:key="post-review-user-{{ $installRequest->id }}" />
+    @endif
+
+    @can('report', $installRequest)
+        <livewire:install-request.report-install-request :install-request="$installRequest" wire:key="rep-ir-user-{{ $installRequest->id }}" />
+    @endcan
+
+    @if ($installRequest->acceptedOffer)
+        @can('report', $installRequest->acceptedOffer->expert)
+            <livewire:install-request.report-user :target-user="$installRequest->acceptedOffer->expert" wire:key="rep-expert-{{ $installRequest->acceptedOffer->expert->id }}-{{ $installRequest->id }}" />
+        @endcan
     @endif
 
     @can('viewMessages', $installRequest)

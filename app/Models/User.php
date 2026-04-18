@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -27,6 +28,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'role',
         'is_active',
+        'public_profile_enabled',
+        'public_slug',
+        'public_bio',
     ];
 
     /**
@@ -51,6 +55,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
             'role' => UserRole::class,
             'is_active' => 'boolean',
+            'public_profile_enabled' => 'boolean',
         ];
     }
 
@@ -67,6 +72,21 @@ class User extends Authenticatable implements MustVerifyEmail
     public function offersAsExpert(): HasMany
     {
         return $this->hasMany(Offer::class, 'expert_user_id');
+    }
+
+    public function reviewsWritten(): HasMany
+    {
+        return $this->hasMany(Review::class, 'reviewer_id');
+    }
+
+    public function reviewsReceived(): HasMany
+    {
+        return $this->hasMany(Review::class, 'reviewee_id');
+    }
+
+    public function reports(): MorphMany
+    {
+        return $this->morphMany(Report::class, 'subject');
     }
 
     public function expertProfileComplete(): bool
@@ -109,5 +129,33 @@ class User extends Authenticatable implements MustVerifyEmail
             ->take(2)
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+
+    /**
+     * First token of display name for public review attribution.
+     */
+    public function publicReviewFirstName(): string
+    {
+        $first = Str::of(trim((string) $this->name))->explode(' ')->first();
+
+        return filled($first) ? (string) $first : __('Member');
+    }
+
+    public function publicReviewRoleLabel(): string
+    {
+        return match ($this->role) {
+            UserRole::EXPERT => __('Linux expert'),
+            UserRole::USER => __('Linux seeker'),
+            UserRole::ADMIN => __('Admin'),
+        };
+    }
+
+    public function publicProfileUrl(): ?string
+    {
+        if (! $this->public_profile_enabled || ! filled($this->public_slug)) {
+            return null;
+        }
+
+        return route('profiles.show', ['public_slug' => $this->public_slug], absolute: false);
     }
 }

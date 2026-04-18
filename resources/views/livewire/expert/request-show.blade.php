@@ -6,6 +6,7 @@ use App\Models\InstallRequest;
 use App\Models\Offer;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 new #[Layout('components.layouts.app')] class extends Component {
@@ -20,7 +21,7 @@ new #[Layout('components.layouts.app')] class extends Component {
     public function mount(InstallRequest $installRequest): void
     {
         $this->authorize('view', $installRequest);
-        $this->installRequest = $installRequest->load(['user', 'acceptedOffer.expert', 'offers']);
+        $this->installRequest = $installRequest->load(['user', 'acceptedOffer.expert', 'offers', 'reviews']);
 
         $existing = Offer::query()
             ->where('install_request_id', $installRequest->id)
@@ -79,6 +80,12 @@ new #[Layout('components.layouts.app')] class extends Component {
 
         $this->dispatch('offer-saved');
     }
+
+    #[On('review-submitted')]
+    public function refreshAfterReview(): void
+    {
+        $this->installRequest->refresh()->load(['user', 'acceptedOffer.expert', 'offers', 'reviews']);
+    }
 }; ?>
 
 <section class="w-full">
@@ -112,7 +119,13 @@ new #[Layout('components.layouts.app')] class extends Component {
     @if ($installRequest->status === InstallRequestStatus::MATCHED && $iAmAcceptedExpert)
         <flux:callout variant="success" class="mt-6" icon="check-circle">
             <p class="font-medium">{{ __('Your offer was accepted. You are the assigned expert.') }}</p>
-            <p class="mt-2 text-sm">{{ __('Seeker') }}: {{ $installRequest->user->name }} — {{ $installRequest->user->email }}</p>
+            <p class="mt-2 text-sm">{{ __('Seeker') }}: {{ $installRequest->user->name }}
+                @if ($installRequest->user->public_profile_enabled && $installRequest->user->public_slug)
+                    — <flux:link :href="route('profiles.show', ['public_slug' => $installRequest->user->public_slug])" wire:navigate>{{ __('Public profile') }}</flux:link>
+                @else
+                    — {{ $installRequest->user->email }}
+                @endif
+            </p>
             <flux:link :href="route('expert.assignments')" class="mt-2 inline-block text-sm font-medium" wire:navigate>{{ __('View all assignments') }}</flux:link>
         </flux:callout>
     @elseif ($installRequest->status === InstallRequestStatus::CLOSED && $iAmAcceptedExpert)
@@ -132,6 +145,18 @@ new #[Layout('components.layouts.app')] class extends Component {
 
     @can('viewMessages', $installRequest)
         <livewire:install-request.message-thread :install-request="$installRequest" wire:key="ir-msg-expert-{{ $installRequest->id }}" />
+    @endcan
+
+    @if ($installRequest->status === InstallRequestStatus::CLOSED && $iAmAcceptedExpert)
+        <livewire:install-request.post-review :install-request="$installRequest" wire:key="post-review-expert-{{ $installRequest->id }}" />
+    @endif
+
+    @can('report', $installRequest)
+        <livewire:install-request.report-install-request :install-request="$installRequest" wire:key="rep-ir-expert-{{ $installRequest->id }}" />
+    @endcan
+
+    @can('report', $installRequest->user)
+        <livewire:install-request.report-user :target-user="$installRequest->user" wire:key="rep-seeker-{{ $installRequest->user->id }}-{{ $installRequest->id }}" />
     @endcan
 
     @if ($installRequest->status === InstallRequestStatus::OPEN)

@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Enums\InstallRequestStatus;
 use App\Enums\UserRole;
 use App\Models\InstallRequest;
+use App\Models\Review;
 use App\Models\User;
 
 class InstallRequestPolicy
@@ -32,6 +33,10 @@ class InstallRequestPolicy
             return true;
         }
 
+        if ($installRequest->status === InstallRequestStatus::SPAM) {
+            return false;
+        }
+
         if ($user->role === UserRole::EXPERT) {
             return $this->expertCanAccessRequest($user, $installRequest);
         }
@@ -46,6 +51,18 @@ class InstallRequestPolicy
         }
 
         return $user->role === UserRole::USER;
+    }
+
+    /**
+     * File a moderation report about this install request.
+     */
+    public function report(User $user, InstallRequest $installRequest): bool
+    {
+        if (! $user->is_active) {
+            return false;
+        }
+
+        return $this->view($user, $installRequest);
     }
 
     public function update(User $user, InstallRequest $installRequest): bool
@@ -65,11 +82,35 @@ class InstallRequestPolicy
         }
 
         if ($user->role === UserRole::ADMIN) {
-            return in_array($installRequest->status, [InstallRequestStatus::OPEN, InstallRequestStatus::MATCHED], true);
+            return in_array($installRequest->status, [
+                InstallRequestStatus::OPEN,
+                InstallRequestStatus::MATCHED,
+            ], true);
         }
 
         return $installRequest->user_id === $user->id
             && $installRequest->status === InstallRequestStatus::OPEN;
+    }
+
+    /**
+     * Admin marks an install request as spam / not a legitimate LIR.
+     */
+    public function markAsSpam(User $user, InstallRequest $installRequest): bool
+    {
+        if (! $user->is_active || $user->role !== UserRole::ADMIN) {
+            return false;
+        }
+
+        if ($installRequest->status === InstallRequestStatus::SPAM) {
+            return false;
+        }
+
+        return in_array($installRequest->status, [
+            InstallRequestStatus::OPEN,
+            InstallRequestStatus::MATCHED,
+            InstallRequestStatus::CLOSED,
+            InstallRequestStatus::CANCELLED,
+        ], true);
     }
 
     public function acceptOffer(User $user, InstallRequest $installRequest): bool
@@ -114,6 +155,10 @@ class InstallRequestPolicy
 
         if ($installRequest->user_id === $user->id) {
             return true;
+        }
+
+        if ($installRequest->status === InstallRequestStatus::SPAM) {
+            return false;
         }
 
         return $this->userIsAcceptedExpert($user, $installRequest);
@@ -161,6 +206,10 @@ class InstallRequestPolicy
             return false;
         }
 
+        if ($installRequest->status === InstallRequestStatus::SPAM) {
+            return false;
+        }
+
         if ($installRequest->offers()->where('expert_user_id', $user->id)->exists()) {
             return true;
         }
@@ -170,6 +219,44 @@ class InstallRequestPolicy
         }
 
         return $this->locationMatchesExpert($user, $installRequest);
+    }
+
+    /**
+     * Whether the user may submit a post-completion review for this install request.
+     */
+    public function createReview(User $user, InstallRequest $installRequest): bool
+    {
+        if (! $user->is_active) {
+            return false;
+        }
+
+        if ($installRequest->status !== InstallRequestStatus::CLOSED) {
+            return false;
+        }
+
+        if ($installRequest->accepted_offer_id === null) {
+            return false;
+        }
+
+        $installRequest->loadMissing('acceptedOffer');
+
+        if ($installRequest->acceptedOffer === null) {
+            return false;
+        }
+
+        $seekerId = (int) $installRequest->user_id;
+        $expertId = (int) $installRequest->acceptedOffer->expert_user_id;
+
+        if ((int) $user->id !== $seekerId && (int) $user->id !== $expertId) {
+            return false;
+        }
+
+        $already = Review::query()
+            ->where('install_request_id', $installRequest->id)
+            ->where('reviewer_id', $user->id)
+            ->exists();
+
+        return ! $already;
     }
 
     private function locationMatchesExpert(User $expert, InstallRequest $request): bool

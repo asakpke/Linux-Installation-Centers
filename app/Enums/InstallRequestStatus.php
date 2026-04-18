@@ -8,4 +8,5 @@ enum InstallRequestStatus: string
     case MATCHED = 'matched';
     case CLOSED = 'closed';
     case CANCELLED = 'cancelled';
+    case SPAM = 'spam';
 }

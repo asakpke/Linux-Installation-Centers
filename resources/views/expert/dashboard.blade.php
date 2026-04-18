@@ -5,6 +5,8 @@
             <flux:subheading class="mt-1">{{ __('Browse install requests in your city and send offers.') }}</flux:subheading>
         </div>
 
+        <livewire:reputation-summary />
+
         <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <flux:card class="p-6">
                 <flux:heading size="lg">{{ __('My assignments') }}</flux:heading>

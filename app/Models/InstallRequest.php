@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\DB;
 
 class InstallRequest extends Model
@@ -58,6 +59,21 @@ class InstallRequest extends Model
     public function messages(): HasMany
     {
         return $this->hasMany(InstallRequestMessage::class);
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function reports(): MorphMany
+    {
+        return $this->morphMany(Report::class, 'subject');
+    }
+
+    public function isSpam(): bool
+    {
+        return $this->status === InstallRequestStatus::SPAM;
     }
 
     public function isOpen(): bool
