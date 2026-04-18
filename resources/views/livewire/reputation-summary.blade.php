@@ -44,7 +44,10 @@ new class extends Component {
         <ul class="mt-4 space-y-3 text-sm">
             @foreach ($this->recentReviews as $review)
                 <li class="border-b border-zinc-200 pb-3 last:border-0 dark:border-zinc-700" wire:key="rr-{{ $review->id }}">
-                    <span class="font-medium">{{ $review->reviewer->publicReviewFirstName() }} · {{ $review->reviewer->publicReviewRoleLabel() }}</span>
+                    <span class="inline-flex flex-wrap items-center gap-x-2 font-medium">
+                        <span>{{ $review->reviewer->publicReviewFirstName() }} · {{ $review->reviewer->publicReviewRoleLabel() }}</span>
+                        <x-user-public-profile-link :user="$review->reviewer" class="text-sm font-medium" :label="__('Profile')" />
+                    </span>
                     <span class="text-amber-600 dark:text-amber-400"> · {{ $review->rating }}/5</span>
                     @if ($review->comment)
                         <p class="mt-1 text-zinc-600 dark:text-zinc-400">{{ $review->comment }}</p>

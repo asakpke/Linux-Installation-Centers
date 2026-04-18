@@ -53,9 +53,13 @@ new #[Layout('components.layouts.app')] class extends Component {
                         <p class="mt-1 text-sm text-zinc-600 dark:text-zinc-300">
                             {{ $req->city }}, {{ $req->country }}
                         </p>
-                        <p class="mt-2 text-sm">
+                        <p class="mt-2 flex flex-wrap items-center gap-x-2 text-sm">
                             <span class="font-medium text-zinc-700 dark:text-zinc-200">{{ __('Seeker') }}:</span>
-                            {{ $req->user->name }} · {{ $req->user->email }}
+                            <span>{{ $req->user->name }}</span>
+                            <x-user-public-profile-link :user="$req->user" class="font-medium" :label="__('Public profile')" />
+                            @unless ($req->user->public_profile_enabled && $req->user->public_slug)
+                                <span class="text-zinc-600 dark:text-zinc-300">· {{ $req->user->email }}</span>
+                            @endunless
                         </p>
                         <p class="mt-2 text-sm">
                             @if ($offer->is_free)
@@ -96,9 +100,13 @@ new #[Layout('components.layouts.app')] class extends Component {
                         <p class="mt-1 text-sm text-zinc-600 dark:text-zinc-300">
                             {{ $req->city }}, {{ $req->country }}
                         </p>
-                        <p class="mt-2 text-sm">
+                        <p class="mt-2 flex flex-wrap items-center gap-x-2 text-sm">
                             <span class="font-medium">{{ __('Seeker') }}:</span>
-                            {{ $req->user->name }} · {{ $req->user->email }}
+                            <span>{{ $req->user->name }}</span>
+                            <x-user-public-profile-link :user="$req->user" class="font-medium" :label="__('Public profile')" />
+                            @unless ($req->user->public_profile_enabled && $req->user->public_slug)
+                                <span class="text-zinc-600 dark:text-zinc-300">· {{ $req->user->email }}</span>
+                            @endunless
                         </p>
                         <p class="mt-2 text-sm">
                             @if ($offer->is_free)

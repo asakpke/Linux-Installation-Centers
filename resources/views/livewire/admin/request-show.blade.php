@@ -41,9 +41,10 @@ new #[Layout('components.layouts.app.admin')] class extends Component {
     <flux:link :href="route('admin.requests.index')" class="text-sm" wire:navigate>{{ __('← Back') }}</flux:link>
 
     <flux:heading size="xl">{{ $installRequest->title }}</flux:heading>
-    <p class="text-zinc-600 dark:text-zinc-400">
-        {{ $installRequest->user->name }} · {{ $installRequest->user->email }}
-        · {{ __($installRequest->status->value) }}
+    <p class="flex flex-wrap items-center gap-x-2 text-zinc-600 dark:text-zinc-400">
+        <span>{{ $installRequest->user->name }} · {{ $installRequest->user->email }}</span>
+        <x-user-public-profile-link :user="$installRequest->user" :label="__('Seeker public profile')" />
+        <span>· {{ __($installRequest->status->value) }}</span>
     </p>
 
     @if (in_array($installRequest->status, [\App\Enums\InstallRequestStatus::OPEN, \App\Enums\InstallRequestStatus::MATCHED], true))
@@ -70,7 +71,11 @@ new #[Layout('components.layouts.app.admin')] class extends Component {
     <div class="space-y-2">
         @forelse ($installRequest->offers as $offer)
             <flux:card class="p-3 text-sm">
-                <strong>{{ $offer->expert->name }}</strong> ({{ $offer->status->value }})
+                <span class="inline-flex flex-wrap items-center gap-x-2">
+                    <strong>{{ $offer->expert->name }}</strong>
+                    <x-user-public-profile-link :user="$offer->expert" class="text-sm font-normal" :label="__('Expert profile')" />
+                </span>
+                ({{ $offer->status->value }})
                 @if ($offer->is_free)
                     · {{ __('Free') }}
                 @else

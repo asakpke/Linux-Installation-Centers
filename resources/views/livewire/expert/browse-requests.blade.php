@@ -27,6 +27,7 @@ new #[Layout('components.layouts.app')] class extends Component {
             ->whereRaw('LOWER(country) = ?', [mb_strtolower($profile->country)])
             ->whereNotNull('city')
             ->whereNotNull('country')
+            ->with('user')
             ->latest()
             ->paginate(10);
     }
@@ -49,9 +50,14 @@ new #[Layout('components.layouts.app')] class extends Component {
                 <flux:link :href="route('expert.requests.show', $installRequest)" class="font-medium" wire:navigate>
                     {{ $installRequest->title }}
                 </flux:link>
-                <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-                    {{ $installRequest->city }}, {{ $installRequest->country }}
-                    · {{ __('Seeker') }}: {{ $installRequest->user->name }}
+                <p class="mt-1 flex flex-wrap items-center gap-x-1 gap-y-1 text-sm text-zinc-500 dark:text-zinc-400">
+                    <span>{{ $installRequest->city }}, {{ $installRequest->country }}</span>
+                    <span>·</span>
+                    <span>{{ __('Seeker') }}: {{ $installRequest->user->name }}</span>
+                    @if ($installRequest->user->public_profile_enabled && $installRequest->user->public_slug)
+                        <span>·</span>
+                        <x-user-public-profile-link :user="$installRequest->user" class="text-sm font-medium" :label="__('Profile')" />
+                    @endif
                 </p>
             </flux:card>
         @empty

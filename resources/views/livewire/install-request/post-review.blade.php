@@ -53,6 +53,12 @@ new class extends Component
     $me = auth()->id();
     $myReview = $installRequest->reviews->firstWhere('reviewer_id', $me);
     $canReview = auth()->user()->can('createReview', $installRequest);
+    $counterparty = null;
+    if ($installRequest->acceptedOffer) {
+        $counterparty = (int) $me === (int) $installRequest->user_id
+            ? $installRequest->acceptedOffer->expert
+            : $installRequest->user;
+    }
 @endphp
 
 <flux:card class="mt-6 p-4">
@@ -60,7 +66,17 @@ new class extends Component
 
     @if ($myReview)
         <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">{{ __('You submitted a review for this install.') }}</p>
+        @if ($counterparty && $counterparty->public_profile_enabled && $counterparty->public_slug)
+            <p class="mt-2 text-sm">
+                <x-user-public-profile-link :user="$counterparty" :label="__('Their public profile')" />
+            </p>
+        @endif
     @elseif ($canReview)
+        @if ($counterparty && $counterparty->public_profile_enabled && $counterparty->public_slug)
+            <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                <x-user-public-profile-link :user="$counterparty" :label="__('About them (public profile)')" />
+            </p>
+        @endif
         <form wire:submit="submitReview" class="mt-4 max-w-md space-y-4">
             <flux:radio.group wire:model="rating" :label="__('Rating')" variant="segmented" class="max-w-md">
                 @foreach (range(1, 5) as $n)

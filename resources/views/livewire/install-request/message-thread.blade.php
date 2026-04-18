@@ -46,11 +46,15 @@ new class extends Component
         @forelse ($installRequest->messages as $message)
             <flux:card class="p-4">
                 <div class="flex flex-wrap items-baseline justify-between gap-2">
-                    <p class="font-medium text-zinc-900 dark:text-zinc-100">
-                        {{ $message->user->name }}
-                        @if ((int) $message->user_id === (int) auth()->id())
-                            <span class="text-sm font-normal text-zinc-500">{{ __('(you)') }}</span>
-                        @endif
+                    <p class="flex flex-wrap items-baseline gap-x-2 font-medium text-zinc-900 dark:text-zinc-100">
+                        <span class="inline-flex flex-wrap items-center gap-x-2">
+                            {{ $message->user->name }}
+                            @if ((int) $message->user_id === (int) auth()->id())
+                                <span class="text-sm font-normal text-zinc-500">{{ __('(you)') }}</span>
+                            @elseif ($message->user->public_profile_enabled && $message->user->public_slug)
+                                <x-user-public-profile-link :user="$message->user" class="text-sm font-medium" :label="__('Profile')" />
+                            @endif
+                        </span>
                     </p>
                     <time class="text-xs text-zinc-500 dark:text-zinc-400" datetime="{{ $message->created_at->toIso8601String() }}">
                         {{ $message->created_at->timezone(config('app.timezone'))->format('Y-m-d H:i') }}

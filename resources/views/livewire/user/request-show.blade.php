@@ -116,13 +116,12 @@ new #[Layout('components.layouts.app')] class extends Component {
         <flux:card class="mt-6 border-emerald-200 bg-emerald-50/50 p-4 dark:border-emerald-900 dark:bg-emerald-950/30">
             <flux:heading size="sm">{{ __('Accepted expert') }}</flux:heading>
             <p class="mt-2 font-medium">{{ $installRequest->acceptedOffer->expert->name }}</p>
-            @if ($installRequest->acceptedOffer->expert->public_profile_enabled && $installRequest->acceptedOffer->expert->public_slug)
-                <p class="mt-1 text-sm">
-                    <flux:link :href="route('profiles.show', ['public_slug' => $installRequest->acceptedOffer->expert->public_slug])" wire:navigate>{{ __('Public profile') }}</flux:link>
-                </p>
-            @else
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">{{ $installRequest->acceptedOffer->expert->email }}</p>
-            @endif
+            <p class="mt-1 flex flex-wrap items-center gap-x-2 text-sm text-zinc-600 dark:text-zinc-400">
+                <x-user-public-profile-link :user="$installRequest->acceptedOffer->expert" :label="__('Public profile')" />
+                @unless ($installRequest->acceptedOffer->expert->public_profile_enabled && $installRequest->acceptedOffer->expert->public_slug)
+                    {{ $installRequest->acceptedOffer->expert->email }}
+                @endunless
+            </p>
             <p class="mt-2 text-sm">
                 @if ($installRequest->acceptedOffer->is_free)
                     {{ __('Free service') }}
@@ -166,7 +165,12 @@ new #[Layout('components.layouts.app')] class extends Component {
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <p class="font-medium">{{ $offer->expert->name }}</p>
-                        <p class="text-sm text-zinc-500">{{ $offer->expert->email }}</p>
+                        <p class="flex flex-wrap items-center gap-x-2 text-sm text-zinc-500 dark:text-zinc-400">
+                            <x-user-public-profile-link :user="$offer->expert" class="font-medium" :label="__('Public profile')" />
+                            @unless ($offer->expert->public_profile_enabled && $offer->expert->public_slug)
+                                {{ $offer->expert->email }}
+                            @endunless
+                        </p>
                         <p class="mt-2 text-sm">
                             @if ($offer->is_free)
                                 {{ __('Free') }}

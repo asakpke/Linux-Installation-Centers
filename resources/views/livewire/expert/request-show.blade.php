@@ -92,9 +92,14 @@ new #[Layout('components.layouts.app')] class extends Component {
     <flux:link :href="route('expert.requests.index')" class="text-sm" wire:navigate>{{ __('← Back to requests') }}</flux:link>
 
     <flux:heading class="mt-2">{{ $installRequest->title }}</flux:heading>
-    <flux:subheading>
-        {{ $installRequest->city }}, {{ $installRequest->country }}
-        · {{ $installRequest->user->name }}
+    <flux:subheading class="flex flex-wrap items-center gap-x-1 gap-y-1">
+        <span>{{ $installRequest->city }}, {{ $installRequest->country }}</span>
+        <span>·</span>
+        <span>{{ $installRequest->user->name }}</span>
+        @if ($installRequest->user->public_profile_enabled && $installRequest->user->public_slug)
+            <span>·</span>
+            <x-user-public-profile-link :user="$installRequest->user" class="font-medium" :label="__('Profile')" />
+        @endif
     </flux:subheading>
 
     @if ($installRequest->body)
@@ -119,11 +124,13 @@ new #[Layout('components.layouts.app')] class extends Component {
     @if ($installRequest->status === InstallRequestStatus::MATCHED && $iAmAcceptedExpert)
         <flux:callout variant="success" class="mt-6" icon="check-circle">
             <p class="font-medium">{{ __('Your offer was accepted. You are the assigned expert.') }}</p>
-            <p class="mt-2 text-sm">{{ __('Seeker') }}: {{ $installRequest->user->name }}
+            <p class="mt-2 flex flex-wrap items-center gap-x-1 gap-y-1 text-sm">
+                <span>{{ __('Seeker') }}: {{ $installRequest->user->name }}</span>
                 @if ($installRequest->user->public_profile_enabled && $installRequest->user->public_slug)
-                    — <flux:link :href="route('profiles.show', ['public_slug' => $installRequest->user->public_slug])" wire:navigate>{{ __('Public profile') }}</flux:link>
+                    <span>—</span>
+                    <x-user-public-profile-link :user="$installRequest->user" :label="__('Public profile')" />
                 @else
-                    — {{ $installRequest->user->email }}
+                    <span>— {{ $installRequest->user->email }}</span>
                 @endif
             </p>
             <flux:link :href="route('expert.assignments')" class="mt-2 inline-block text-sm font-medium" wire:navigate>{{ __('View all assignments') }}</flux:link>
