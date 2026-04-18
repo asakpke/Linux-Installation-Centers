@@ -16,7 +16,8 @@
                     </span>
                 </a>
                 @if (Route::has('login'))
-                    <nav class="flex shrink-0 items-center gap-4">
+                    <nav class="flex shrink-0 flex-wrap items-center gap-3 sm:gap-4">
+                        <a href="{{ route('support-the-project') }}" class="rounded-md px-3 py-2 text-sm font-medium text-[#1b1b18] hover:bg-black/5 dark:text-[#EDEDEC] dark:hover:bg-white/5">{{ __('Support') }}</a>
                         @auth
                             <a href="{{ url('/dashboard') }}" class="rounded-md border border-[#19140035] px-4 py-2 text-sm font-medium hover:border-[#1915014a] dark:border-[#3E3E3A] dark:hover:border-[#62605b]">{{ __('Dashboard') }}</a>
                         @else
@@ -40,7 +41,25 @@
                     <span class="absolute -start-[calc(0.5rem+1px)] mt-1.5 h-3 w-3 rounded-full border-2 border-[#1b1b18] bg-[#FDFDFC] dark:border-white dark:bg-[#0a0a0a]"></span>
                     <article>
                         <header class="mb-3">
-                            <time class="text-sm font-semibold text-[#2563eb] dark:text-[#60a5fa]" datetime="2026-04-18">
+                            <time class="text-sm font-semibold text-[#2563eb] dark:text-[#60a5fa]" datetime="2026-04-19">
+                                19 April 2026
+                            </time>
+                            <p class="text-xs text-[#6b7280] dark:text-[#9ca3af]">
+                                {{ __('Support & sustainability') }}
+                            </p>
+                        </header>
+                        <ul class="list-inside list-disc space-y-2 text-sm leading-relaxed text-[#374151] dark:text-[#d1d5db]">
+                            <li>{{ __('Added Support the project page (/support-the-project) with domain priority, costs, and ways to help; linked from the home footer, What’s new header/footer, and this changelog.') }}</li>
+                            <li>{{ __('Home footer now highlights the top need: a production domain, with a short line pointing to the support page.') }}</li>
+                        </ul>
+                    </article>
+                </li>
+
+                <li class="relative">
+                    <span class="absolute -start-[calc(0.5rem+1px)] mt-1.5 h-3 w-3 rounded-full border-2 border-[#d1d5db] bg-[#FDFDFC] dark:border-[#525252] dark:bg-[#0a0a0a]"></span>
+                    <article>
+                        <header class="mb-3">
+                            <time class="text-sm font-semibold text-[#1b1b18] dark:text-white" datetime="2026-04-18">
                                 18 April 2026
                             </time>
                             <p class="text-xs text-[#6b7280] dark:text-[#9ca3af]">
@@ -170,8 +189,10 @@
                 </li>
             </ol>
 
-            <p class="mt-12 border-t border-[#e5e7eb] pt-8 text-center text-sm text-[#6b7280] dark:text-[#9ca3af]">
+            <p class="mt-12 border-t border-[#e5e7eb] pt-8 text-center text-sm text-[#6b7280] dark:border-[#3E3E3A] dark:text-[#9ca3af]">
                 <a href="{{ $github_url ?? 'https://github.com/asakpke/Linux-Installation-Centers' }}" class="text-[#2563eb] underline underline-offset-2 hover:text-[#1d4ed8] dark:text-[#60a5fa] dark:hover:text-[#93c5fd]" target="_blank" rel="noopener noreferrer">{{ __('GitHub repository') }}</a>
+                ·
+                <a href="{{ route('support-the-project') }}" class="text-[#2563eb] underline underline-offset-2 hover:text-[#1d4ed8] dark:text-[#60a5fa] dark:hover:text-[#93c5fd]">{{ __('Support the project') }}</a>
                 ·
                 <a href="{{ route('home') }}" class="text-[#2563eb] underline underline-offset-2 hover:text-[#1d4ed8] dark:text-[#60a5fa] dark:hover:text-[#93c5fd]">{{ __('Back to home') }}</a>
             </p>

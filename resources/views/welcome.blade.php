@@ -214,9 +214,16 @@
             </section>
 
             {{-- Footer note --}}
-            <footer class="pt-8 border-t border-[#e5e7eb] dark:border-[#3E3E3A] text-center space-y-2">
+            <footer class="pt-8 border-t border-[#e5e7eb] dark:border-[#3E3E3A] text-center space-y-3">
                 <p class="text-sm text-[#6b7280] dark:text-[#9ca3af]">
-                    This project is under development. See <a href="{{ route('whats-new') }}">what&rsquo;s new</a>, follow progress, report issues, or contribute on <a href="{{ $github_url ?? 'https://github.com/asakpke/Linux-Installation-Centers' }}" target="_blank" rel="noopener noreferrer">GitHub</a>.
+                    {{ __('This project is under development. See') }}
+                    <a href="{{ route('whats-new') }}">{{ __("What's new") }}</a>,
+                    {{ __('follow progress, report issues, or contribute on') }}
+                    <a href="{{ $github_url ?? 'https://github.com/asakpke/Linux-Installation-Centers' }}" target="_blank" rel="noopener noreferrer">GitHub</a>.
+                </p>
+                <p class="text-sm font-medium text-[#374151] dark:text-[#d1d5db]">
+                    {{ __('Priority: we need a production domain (e.g. LinuxInstallationCenters.com).') }}
+                    <a href="{{ route('support-the-project') }}">{{ __('Support the project') }}</a>.
                 </p>
                 <p class="text-xs text-[#9ca3af] dark:text-[#6b7280]">
                     Powered by <a href="https://www.esite.pk" target="_blank" rel="noopener noreferrer" class="hover:underline">RoshanTech</a> · <a href="https://www.esite.pk" target="_blank" rel="noopener noreferrer" class="hover:underline">www.eSite.pk</a>

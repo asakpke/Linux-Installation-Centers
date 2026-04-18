@@ -56,6 +56,13 @@ Route::get('whats-new', function () {
     ]);
 })->name('whats-new');
 
+Route::get('support-the-project', function () {
+    return view('support-the-project', [
+        'title' => __('Support the project').' · '.config('app.name'),
+        'github_url' => 'https://github.com/asakpke/Linux-Installation-Centers',
+    ]);
+})->name('support-the-project');
+
 Route::livewire('profiles/{public_slug}', 'profile.public-show')->name('profiles.show');
 
 Route::get('dashboard', function () {
