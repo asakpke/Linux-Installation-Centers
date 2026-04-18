@@ -3,9 +3,9 @@
     <head>
         @include('partials.head')
     </head>
-    <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] dark:text-[#EDEDEC] antialiased">
-        <header class="mx-auto w-full max-w-3xl px-4 py-6 sm:px-6">
-            <div class="flex flex-wrap items-center justify-between gap-4">
+    <body class="min-h-screen bg-gradient-to-b from-zinc-50 via-[#FAFAF8] to-[#F5F5F0] text-[#1b1b18] antialiased dark:from-[#0c0c0c] dark:via-[#0a0a0a] dark:to-[#121211] dark:text-[#EDEDEC]">
+        <header class="sticky top-0 z-10 w-full border-b border-[#e5e7eb]/90 bg-zinc-50/80 shadow-sm backdrop-blur-md dark:border-[#3E3E3A]/80 dark:bg-[#0c0c0c]/80">
+            <div class="mx-auto flex w-full max-w-3xl flex-wrap items-center justify-between gap-4 px-4 py-5 sm:px-6">
                 <a
                     href="{{ route('home') }}"
                     class="group flex min-w-0 items-center gap-3 text-left"
@@ -28,7 +28,7 @@
             </div>
         </header>
 
-        <main class="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
+        <main class="mx-auto max-w-3xl px-4 pb-16 pt-2 sm:px-6">
             <h1 class="mb-2 text-3xl font-semibold tracking-tight text-[#1b1b18] dark:text-white sm:text-4xl">
                 {{ __('Support the project') }}
             </h1>

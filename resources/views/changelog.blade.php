@@ -3,9 +3,9 @@
     <head>
         @include('partials.head')
     </head>
-    <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] dark:text-[#EDEDEC] antialiased">
-        <header class="mx-auto w-full max-w-3xl px-4 py-6 sm:px-6">
-            <div class="flex flex-wrap items-center justify-between gap-4">
+    <body class="min-h-screen bg-gradient-to-b from-zinc-50 via-[#FAFAF8] to-[#F5F5F0] text-[#1b1b18] antialiased dark:from-[#0c0c0c] dark:via-[#0a0a0a] dark:to-[#121211] dark:text-[#EDEDEC]">
+        <header class="sticky top-0 z-10 w-full border-b border-[#e5e7eb]/90 bg-zinc-50/80 shadow-sm backdrop-blur-md dark:border-[#3E3E3A]/80 dark:bg-[#0c0c0c]/80">
+            <div class="mx-auto flex w-full max-w-3xl flex-wrap items-center justify-between gap-4 px-4 py-5 sm:px-6">
                 <a
                     href="{{ route('home') }}"
                     class="group flex min-w-0 items-center gap-3 text-left"
@@ -28,7 +28,7 @@
             </div>
         </header>
 
-        <main class="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
+        <main class="mx-auto max-w-3xl px-4 pb-16 pt-2 sm:px-6">
             <h1 class="mb-2 text-3xl font-semibold tracking-tight text-[#1b1b18] dark:text-white sm:text-4xl">
                 {{ __("What's new") }}
             </h1>
@@ -41,7 +41,27 @@
                     <span class="absolute -start-[calc(0.5rem+1px)] mt-1.5 h-3 w-3 rounded-full border-2 border-[#1b1b18] bg-[#FDFDFC] dark:border-white dark:bg-[#0a0a0a]"></span>
                     <article>
                         <header class="mb-3">
-                            <time class="text-sm font-semibold text-[#2563eb] dark:text-[#60a5fa]" datetime="2026-04-19">
+                            <time class="text-sm font-semibold text-[#2563eb] dark:text-[#60a5fa]" datetime="2026-04-20">
+                                20 April 2026
+                            </time>
+                            <p class="text-xs text-[#6b7280] dark:text-[#9ca3af]">
+                                {{ __('Marketing pages & global polish') }}
+                            </p>
+                        </header>
+                        <ul class="list-inside list-disc space-y-2 text-sm leading-relaxed text-[#374151] dark:text-[#d1d5db]">
+                            <li>{{ __('Global CSS: smooth scrolling and themed text selection (accent colors in light and dark).') }}</li>
+                            <li>{{ __('Home: subtle page gradient, sticky header with blur and border, soft hero glow behind the logo row, frosted logo container, hover depth on feature and snapshot cards, and refined “How it works” step badges.') }}</li>
+                            <li>{{ __('Support the project, What’s new, and the public-simple layout: matching gradient backgrounds, sticky blurred headers, and slightly more vertical rhythm on main content.') }}</li>
+                            <li>{{ __('Note: authenticated Flux app chrome (sidebar dashboards) was intentionally unchanged.') }}</li>
+                        </ul>
+                    </article>
+                </li>
+
+                <li class="relative">
+                    <span class="absolute -start-[calc(0.5rem+1px)] mt-1.5 h-3 w-3 rounded-full border-2 border-[#d1d5db] bg-[#FDFDFC] dark:border-[#525252] dark:bg-[#0a0a0a]"></span>
+                    <article>
+                        <header class="mb-3">
+                            <time class="text-sm font-semibold text-[#1b1b18] dark:text-white" datetime="2026-04-19">
                                 19 April 2026
                             </time>
                             <p class="text-xs text-[#6b7280] dark:text-[#9ca3af]">
