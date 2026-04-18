@@ -78,11 +78,7 @@ new class extends Component
             </p>
         @endif
         <form wire:submit="submitReview" class="mt-4 max-w-md space-y-4">
-            <flux:radio.group wire:model="rating" :label="__('Rating')" variant="segmented" class="max-w-md">
-                @foreach (range(1, 5) as $n)
-                    <flux:radio :value="$n" :label="(string) $n" />
-                @endforeach
-            </flux:radio.group>
+            <x-rating-scale-picker :current="$rating" />
             <flux:textarea wire:model="comment" :label="__('Comment (optional)')" rows="3" />
             <flux:button type="submit" variant="primary">{{ __('Submit review') }}</flux:button>
         </form>
