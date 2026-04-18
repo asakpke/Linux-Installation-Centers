@@ -1,11 +1,51 @@
 <?php
 
+use App\Enums\InstallRequestStatus;
 use App\Enums\UserRole;
+use App\Models\InstallRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
+    $recentInstallRequests = InstallRequest::query()
+        ->where('status', '!=', InstallRequestStatus::SPAM)
+        ->latest()
+        ->limit(5)
+        ->get(['id', 'title', 'city', 'country', 'status', 'created_at']);
+
+    $recentSeekerSignups = User::query()
+        ->where('role', UserRole::USER)
+        ->where('is_active', true)
+        ->latest()
+        ->limit(5)
+        ->get(['id', 'name', 'created_at']);
+
+    $recentExpertSignups = User::query()
+        ->where('role', UserRole::EXPERT)
+        ->where('is_active', true)
+        ->with(['expertProfile' => fn ($q) => $q->select('id', 'user_id', 'city', 'country')])
+        ->latest()
+        ->limit(5)
+        ->get(['id', 'name', 'created_at']);
+
+    $popularExperts = User::query()
+        ->where('role', UserRole::EXPERT)
+        ->where('is_active', true)
+        ->with(['expertProfile' => fn ($q) => $q->select('id', 'user_id', 'city', 'country')])
+        ->withCount('reviewsReceived')
+        ->withAvg('reviewsReceived', 'rating')
+        ->orderByDesc('reviews_received_count')
+        ->orderByDesc('reviews_received_avg_rating')
+        ->orderByDesc('created_at')
+        ->limit(5)
+        ->get(['id', 'name', 'created_at']);
+
     return view('welcome', [
         'github_url' => 'https://github.com/asakpke/Linux-Installation-Centers',
+        'recentInstallRequests' => $recentInstallRequests,
+        'recentSeekerSignups' => $recentSeekerSignups,
+        'recentExpertSignups' => $recentExpertSignups,
+        'popularExperts' => $popularExperts,
     ]);
 })->name('home');
 

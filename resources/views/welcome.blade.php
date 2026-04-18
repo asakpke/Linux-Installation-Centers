@@ -118,6 +118,101 @@
                 </div>
             </section>
 
+            {{-- Community snapshot: recent requests & seeker sign-ups --}}
+            <section class="mb-14 lg:mb-18" aria-labelledby="snapshot-heading">
+                <h2 id="snapshot-heading" class="text-xl font-semibold text-[#1b1b18] dark:text-white mb-2 text-center">{{ __('Community activity') }}</h2>
+                <p class="text-sm text-center text-[#6b7280] dark:text-[#9ca3af] mb-8 max-w-2xl mx-auto">{{ __('A live peek at what people are posting and who is joining.') }} <a href="{{ route('register') }}">{{ __('Create a free account') }}</a> {{ __('to respond to requests or offer help.') }}</p>
+                <div class="grid md:grid-cols-2 gap-8 lg:gap-10">
+                    <div class="p-6 rounded-xl bg-white dark:bg-[#161615] border border-[#e5e7eb] dark:border-[#3E3E3A] shadow-sm">
+                        <h3 class="text-lg font-semibold text-[#1b1b18] dark:text-white mb-4">{{ __('Recent install requests') }}</h3>
+                        <ul class="space-y-4 text-sm text-[#374151] dark:text-[#d1d5db]">
+                            @forelse (($recentInstallRequests ?? []) as $req)
+                                <li class="border-b border-[#e5e7eb] dark:border-[#3E3E3A] pb-3 last:border-0 last:pb-0">
+                                    <p class="font-medium text-[#1b1b18] dark:text-white leading-snug">{{ \Illuminate\Support\Str::limit($req->title, 72) }}</p>
+                                    <p class="mt-1 text-[#6b7280] dark:text-[#9ca3af]">
+                                        @if (filled($req->city) || filled($req->country))
+                                            {{ collect([$req->city, $req->country])->filter()->implode(', ') }}
+                                            <span class="text-[#9ca3af] dark:text-[#6b7280]"> · </span>
+                                        @endif
+                                        <span class="capitalize">{{ __($req->status->value) }}</span>
+                                        <span class="text-[#9ca3af] dark:text-[#6b7280]"> · </span>
+                                        {{ $req->created_at->diffForHumans() }}
+                                    </p>
+                                </li>
+                            @empty
+                                <li class="text-[#6b7280] dark:text-[#9ca3af]">{{ __('No install requests yet—be the first to post after you sign up.') }}</li>
+                            @endforelse
+                        </ul>
+                    </div>
+                    <div class="p-6 rounded-xl bg-white dark:bg-[#161615] border border-[#e5e7eb] dark:border-[#3E3E3A] shadow-sm">
+                        <h3 class="text-lg font-semibold text-[#1b1b18] dark:text-white mb-4">{{ __('Recent seeker sign-ups') }}</h3>
+                        <ul class="space-y-3 text-sm text-[#374151] dark:text-[#d1d5db]">
+                            @forelse (($recentSeekerSignups ?? []) as $u)
+                                <li class="flex flex-wrap items-baseline justify-between gap-2 border-b border-[#e5e7eb] dark:border-[#3E3E3A] pb-3 last:border-0 last:pb-0">
+                                    <span class="font-medium text-[#1b1b18] dark:text-white">{{ \Illuminate\Support\Str::of($u->name)->explode(' ')->first() }}</span>
+                                    <span class="text-[#6b7280] dark:text-[#9ca3af]">{{ $u->created_at->diffForHumans() }}</span>
+                                </li>
+                            @empty
+                                <li class="text-[#6b7280] dark:text-[#9ca3af]">{{ __('No seekers yet—invite friends who want Linux help.') }}</li>
+                            @endforelse
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            {{-- Experts: new & popular --}}
+            <section class="mb-14 lg:mb-18" aria-labelledby="experts-heading">
+                <h2 id="experts-heading" class="text-xl font-semibold text-[#1b1b18] dark:text-white mb-2 text-center">{{ __('Linux experts on the platform') }}</h2>
+                <p class="text-sm text-center text-[#6b7280] dark:text-[#9ca3af] mb-8 max-w-2xl mx-auto">{{ __('Experts set their own areas and offers.') }} <a href="{{ route('register') }}">{{ __('Register as an expert') }}</a> {{ __('to appear in local browse lists.') }}</p>
+                <div class="grid md:grid-cols-2 gap-8 lg:gap-10">
+                    <div class="p-6 rounded-xl bg-white dark:bg-[#161615] border border-[#e5e7eb] dark:border-[#3E3E3A] shadow-sm">
+                        <h3 class="text-lg font-semibold text-[#1b1b18] dark:text-white mb-4">{{ __('Newest expert sign-ups') }}</h3>
+                        <ul class="space-y-4 text-sm text-[#374151] dark:text-[#d1d5db]">
+                            @forelse (($recentExpertSignups ?? []) as $ex)
+                                <li class="border-b border-[#e5e7eb] dark:border-[#3E3E3A] pb-3 last:border-0 last:pb-0">
+                                    <p class="font-medium text-[#1b1b18] dark:text-white">{{ \Illuminate\Support\Str::of($ex->name)->explode(' ')->first() }}</p>
+                                    @php $ep = $ex->expertProfile; @endphp
+                                    @if ($ep && (filled($ep->city) || filled($ep->country)))
+                                        <p class="mt-1 text-[#6b7280] dark:text-[#9ca3af]">{{ collect([$ep->city, $ep->country])->filter()->implode(', ') }}</p>
+                                    @endif
+                                    <p class="mt-1 text-xs text-[#9ca3af] dark:text-[#6b7280]">{{ $ex->created_at->diffForHumans() }}</p>
+                                </li>
+                            @empty
+                                <li class="text-[#6b7280] dark:text-[#9ca3af]">{{ __('No experts yet—the first local pros are onboarding now.') }}</li>
+                            @endforelse
+                        </ul>
+                    </div>
+                    <div class="p-6 rounded-xl bg-white dark:bg-[#161615] border border-[#e5e7eb] dark:border-[#3E3E3A] shadow-sm">
+                        <h3 class="text-lg font-semibold text-[#1b1b18] dark:text-white mb-4">{{ __('Popular experts') }}</h3>
+                        <p class="text-xs text-[#6b7280] dark:text-[#9ca3af] mb-4">{{ __('Ranked by completed reviews from seekers (average rating, then review count).') }}</p>
+                        <ul class="space-y-4 text-sm text-[#374151] dark:text-[#d1d5db]">
+                            @forelse (($popularExperts ?? []) as $ex)
+                                <li class="border-b border-[#e5e7eb] dark:border-[#3E3E3A] pb-3 last:border-0 last:pb-0">
+                                    <p class="font-medium text-[#1b1b18] dark:text-white">{{ \Illuminate\Support\Str::of($ex->name)->explode(' ')->first() }}</p>
+                                    @php $ep = $ex->expertProfile; @endphp
+                                    @if ($ep && (filled($ep->city) || filled($ep->country)))
+                                        <p class="mt-1 text-[#6b7280] dark:text-[#9ca3af]">{{ collect([$ep->city, $ep->country])->filter()->implode(', ') }}</p>
+                                    @endif
+                                    <p class="mt-1 text-xs text-[#9ca3af] dark:text-[#6b7280]">
+                                        @if (($ex->reviews_received_count ?? 0) > 0)
+                                            {{ trans_choice(':count review|:count reviews', $ex->reviews_received_count, ['count' => $ex->reviews_received_count]) }}
+                                            @if ($ex->reviews_received_avg_rating !== null)
+                                                <span class="text-[#9ca3af] dark:text-[#6b7280]"> · </span>
+                                                {{ __('Avg. :n / 5', ['n' => number_format((float) $ex->reviews_received_avg_rating, 1)]) }}
+                                            @endif
+                                        @else
+                                            {{ __('No reviews yet') }}
+                                        @endif
+                                    </p>
+                                </li>
+                            @empty
+                                <li class="text-[#6b7280] dark:text-[#9ca3af]">{{ __('No experts to highlight yet.') }}</li>
+                            @endforelse
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
             {{-- Footer note --}}
             <footer class="pt-8 border-t border-[#e5e7eb] dark:border-[#3E3E3A] text-center space-y-2">
                 <p class="text-sm text-[#6b7280] dark:text-[#9ca3af]">
